@@ -2,17 +2,19 @@ import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 
-import './config/database';
+import './config/';
 import ApplyMiddlewares from './middlewares';
 import router from './routes';
+import {PORT} from './config/config'
 
 const app = express();
 
-app.use(cors());
+app.use(cors()); // cors is used connect front end with backend
 ApplyMiddlewares(app);
 
-app.use('/v1', router);
+app.use('/', router);
+// app.use('/', router);
 
-app.listen(process.env.PORT, () => {
-  console.log(`app is listening to port ${process.env.PORT}`);
+app.listen(PORT, () => {
+  console.log(`app is listening to port ${PORT}`);
 });

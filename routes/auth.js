@@ -9,9 +9,9 @@ router.get('/', async (req, res) => {
     const {
       data
     } = req.body
-    res.status(200).send({ message: 'Return ay message' });
+    res.status(200).send({ message: 'This is the first file' });
   } catch (err) {
-    await catchResponse({
+    catchResponse({
       res,
       err
     });

@@ -1,4 +1,4 @@
-import { connection, connect, set } from 'mongoose';
+import mongoose from 'mongoose';
 
 const { MONGO_URL } = process.env;
 
@@ -8,13 +8,13 @@ const options = {
 };
 
 (function SetupDatabase() {
-  const { readyState } = connection;
+  const { readyState } = mongoose.connection;
 
   if (
     readyState !== 1 || readyState !== 2
   ) {
-    set('strictQuery', false)
-    connect(MONGO_URL, options)
+    mongoose.set('strictQuery', false)
+    mongoose.connect(MONGO_URL, options)
       .then(() => {
         console.log('INFO - MongoDB Database connected.');
       })
