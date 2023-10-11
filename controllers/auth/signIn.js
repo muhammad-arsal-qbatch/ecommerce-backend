@@ -1,23 +1,23 @@
 import bcrypt from 'bcrypt';
+
 import User from "../../models/userSchema";
 
+const SignIn = async ({
+  email,
+  password
+}) => {
+  const user = await User.findOne({ email });
 
-const SignIn = async (email, password) => {
-
-  const user = await User.findOne({ email }); // finding the user
-  if(user) {
-     const value = await bcrypt.compare(password, user.password) 
+  if (user) {
+     const value = await bcrypt.compare(password, user.password);
      if (value) {
-      return 'Password Matched'
+      return { user };
      } else {
-      return 'User is not authorized';
-      
+      return { message: 'User is not authorized' };
      }
-
   }
-  else{
-    return 'Please create account first'
-  }
+  
+  return { message: 'Please create account first' };
 };
 
 export default SignIn;

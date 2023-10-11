@@ -10,6 +10,7 @@ const user = mongoose.Schema({
         type: String,
         required: true
     },
+    mobileNo: String
 })
 
 const User = mongoose.model('users', user, 'users')

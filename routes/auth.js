@@ -1,6 +1,6 @@
 import express from 'express';
 
-import catchResponse from '../utils/catch-response';
+import CatchResponse from '../utils/catch-response';
 
 const router = express.Router();
 
@@ -11,7 +11,7 @@ router.get('/', async (req, res) => {
     } = req.body
     res.status(200).send({ message: 'This is the first file' });
   } catch (err) {
-    catchResponse({
+    CatchResponse({
       res,
       err
     });

@@ -1,26 +1,14 @@
 import express from 'express'
-// import mongoose from 'mongoose';
-// import {userSchema} from '../models/userSchema'
-import { SignIn, SignUp } from '../controllers/auth';
-import { generateToken } from '../middlewares/auth';
 import passport from 'passport';
+
+import { SignIn, SignUp } from '../controllers';
+import { generateToken } from '../middlewares/auth';
+
 const router = express.Router();
 
-// const userModel = mongoose.model('myUsers', userSchema)
-// const myPreHook = function (req,res,next) {
-//     if(req.params.email)
-//     {
-//         console.log('Request is : ',req.params.email);
-//     }
-//     next();
-// }
-
-router.get('/orders',passport.authenticate('jwt', {session:false}),async (req ,res)=>{
-    
-
+router.get('/orders', passport.authenticate('jwt', { session:false }), async (req, res) => {
     res.send(req.token);
-
-})
+});
 
 router.post('/signIn', async (req,res)=> {
     // do validation in routes
@@ -29,22 +17,28 @@ router.post('/signIn', async (req,res)=> {
         password
     } = req.body;
     
-    console.log(req.body);
+    // console.log('email and password is ', email, password);
     
-    const result = await SignIn(email, password)
-    if(result === 'Password Matched')
+    const result = await SignIn({
+      email,
+      password
+    });
+
+    // console.log('inside signin page')
+    if(!result.message)
     {
         const token = generateToken(email);
         console.log('token is, ',token);
         res.status(200).send({
-            message:token
+            message: token,
+            user: result.user
         })
 
 
     }
     else{
         res.status(401).send({
-            message:result
+            message:result.message
         })
 
     }
@@ -70,15 +64,20 @@ router.post('/signIn', async (req,res)=> {
     
 })
 
-router.post('/signUp', async (req,res) => {
+router.post('/signup', async (req,res) => {
 	try{
         const {name,
 		email,
-		password} = req.body;
+		password,
+        mobileNo
+    } = req.body;
 
-	const user= await SignUp(name,email, password);
+	const user= await SignUp(name,email, password, mobileNo);
+    console.log('in route user is, ', user);
 	res.send(user);
 	}catch (error){
+        console.log('user is ', error);
+
 		console.log('there is some error')	
 	}
 

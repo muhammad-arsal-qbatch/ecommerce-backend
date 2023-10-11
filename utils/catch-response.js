@@ -1,5 +1,4 @@
-
-const catchResponse = ({
+const CatchResponse = ({
   res,
   err
 }) => {
@@ -24,4 +23,4 @@ const catchResponse = ({
   });
 };
 
-export default catchResponse;
+export default CatchResponse;
