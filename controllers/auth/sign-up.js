@@ -1,6 +1,6 @@
-import User from '../../models/userSchema';
+import User from '../../models/user';
 
-import { hashPassword } from '../../middlewares/auth';
+import { HashPassword } from '../../middlewares/auth';
 
 const SignUp = async ({
     name,
@@ -9,9 +9,8 @@ const SignUp = async ({
     mobileNo
 }) => {
     const user = await User.findOne({ email });
-
     if (!user) {
-        const hashedPassword = await hashPassword(password); // h should be capital
+        const hashedPassword = await HashPassword(password);
         const newUser = new User({
             name,
             email,
@@ -26,7 +25,7 @@ const SignUp = async ({
         return { user: newUser };
     }
 
-    return { message: 'user with this email already exist, please use different email' };
+    throw new Error('user with this email already exist, please use different email');
 };
 
 export default SignUp;

@@ -1,5 +1,5 @@
 import Orders from '../models/orders';
-import User from '../models/userSchema';
+import User from '../models/user';
 
 const PlaceOrder = async (order) => {
     try{
@@ -7,9 +7,8 @@ const PlaceOrder = async (order) => {
         const finalOrder = await GetFinalOrder(order);
         console.log({ finalOrder });
         await Orders.insertMany(finalOrder);
+
         return finalOrder;
-
-
     }catch(error) {
         console.log(error)
     }
@@ -17,12 +16,10 @@ const PlaceOrder = async (order) => {
 
 const GetOrders = async ({ userId }) => {
     try{
-        // console.log('user id is, ', userId);
-        const orders= await Orders.find({userId: userId}, {productId: 0})
-        // console.log({ orders })
-        return orders;
+        const orders = await Orders.find({ userId: userId }, { productId: 0 });
 
-    }catch(error){
+        return orders;
+    } catch(error) {
         console.log({ error });
     }
 }
@@ -35,19 +32,18 @@ const GetOrdersInGroup = async () => {
                     totalQuantity: { $sum: '$totalQuantity' },
                     userName: { $addToSet: '$userName' },
                     date: { $addToSet: '$date' },
-                    totalAmount: {$addToSet: '$totalAmount'}, // Calculate total amount
-                    status: {$addToSet: '$status'}, // Calculate total amount
-                    delivered: {$addToSet: '$delivered'} // Calculate total amount
-
+                    totalAmount: { $addToSet: '$totalAmount' },
+                    status: { $addToSet: '$status' },
+                    delivered: { $addToSet: '$delivered' }
                 }
             },
             {
                 $project: {
-                    _id: 0, // Exclude _id field from the result
-                    orderId: '$_id', // Rename _id to orderId
-                    totalQuantity: 1, // Include totalQuantity in the result
-                    userName: 1, // Include usernames in the result
-                    date: 1, // Include dates in the result
+                    _id: 0,
+                    orderId: '$_id',
+                    totalQuantity: 1,
+                    userName: 1,
+                    date: 1,
                     totalAmount: 1,
                     status: 1,
                     delivered: 1
@@ -55,19 +51,15 @@ const GetOrdersInGroup = async () => {
             }
         ]);
 
-        // console.log('Grouped Orders:', orders);
         return {orders};
-
-
-    } catch(error){
-        console.log(error);
+    } catch(error) {
+        throw new Error('error while fetching orderss');
     }
 }
 
 const GetFinalOrder = async (order) => {
     try{
         const latestOrder = await Orders.findOne().sort({ date: -1 }).select('orderId').exec();
-        console.log('latetst order is', latestOrder);
         if(latestOrder)
         {
             order.orderId = latestOrder.orderId+1;
@@ -75,68 +67,51 @@ const GetFinalOrder = async (order) => {
         else{
             order.orderId = 100;
         }
-        // const finalOrder = order.map((o) => {
-        //     o.orderId = latestOrder.orderId + 1;
-        //     return o;
         var totalAmount = 0;
-        order.products.map((product)=>{
-            totalAmount+= (product.quantity * product.price);
-
+        order.products.map((product) => {
+            totalAmount += (product.quantity * product.price);
         })
         order.totalAmount = totalAmount;
 
-
-        // })
         return order;
-
-    }catch(error){
+    } catch(error) {
         console.log(error);
     }
 }
+
 const DeliverOrder = async (order) => {
-    console.log({order});
     try{
         const updatedOrder = await Orders.findOneAndUpdate(
-            {orderId: order.orderId},
+            { orderId: order.orderId },
             {
                 delivered: 'Delivered'
             },
             { new: true }
         )
-        console.log({ updatedOrder })
-        return updatedOrder;
 
-    }catch(error){
-        console.log(error);
-        return { error }
+        return updatedOrder;
+    } catch(error) {
+        throw new Error('Order cannot be delivered');
     }
 }
+
 const UpdateDeliveryAddress = async ({ userId, body }) => {
     try{
-
-        console.log('in update , ', body);
         const user = await User.findOne({ _id: userId });
-
         if (!user) {
             return { error: 'User not found' };
         }
-
-        // Update the deliveryPerson field with the selectedAddress
         user.selectedPerson = body;
-
-        // Save the updated user
         await user.save();
-        return user;
 
-    }catch(error){
-        console.log(error);
-        return { error }
+        return user;
+    } catch(error) {
+        return { error };
     }
 }
 
-
-
-export { PlaceOrder,
+export { 
+    PlaceOrder,
     GetOrders,
     GetFinalOrder,
     GetOrdersInGroup,

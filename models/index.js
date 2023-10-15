@@ -1,1 +1,3 @@
-import './userSchema';
+import './user';
+import './orders';
+import './products';
