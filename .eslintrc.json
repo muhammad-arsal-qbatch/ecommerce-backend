@@ -9,5 +9,9 @@
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
-  "rules": {}
+  "rules": { "react/react-in-jsx-scope":"off",
+  "quotes":["error","single"],
+  "semi":[0, "never"],        
+  "no-trailing-spaces":"warn",
+  "indent":"warn"}
 }

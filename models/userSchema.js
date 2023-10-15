@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const user = mongoose.Schema({
     name: String,
@@ -10,7 +10,23 @@ const user = mongoose.Schema({
         type: String,
         required: true
     },
-    mobileNo: String
+    mobileNo: String,
+    deliveryAddress: {
+        type: Array,
+        default: []
+    },
+    paymentMethods: {
+        type: Array,
+        default: []
+    },
+    selectedPerson: {
+        type: Number,
+        default: 0
+    },
+    selectedPaymentMethod: {
+        type: Number,
+        default: 0
+    }
 })
 
 const User = mongoose.model('users', user, 'users')
