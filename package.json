@@ -12,6 +12,7 @@
   "author": "ihtisham.tanveer",
   "license": "ISC",
   "dependencies": {
+    "agenda": "^5.0.0",
     "babel-polyfill": "^6.26.0",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",

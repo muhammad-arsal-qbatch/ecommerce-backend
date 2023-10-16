@@ -48,6 +48,11 @@ const GetOrdersInGroup = async () => {
                     status: 1,
                     delivered: 1
                 }
+            },
+            {
+                $sort: {
+                    orderId: -1
+                }
             }
         ]);
 
@@ -110,7 +115,7 @@ const UpdateDeliveryAddress = async ({ userId, body }) => {
     }
 }
 
-export { 
+export {
     PlaceOrder,
     GetOrders,
     GetFinalOrder,

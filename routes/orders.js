@@ -7,6 +7,8 @@ import {
     PlaceOrder
 } from '../controllers/orders';
 
+import DashboardStats from '../models/dashboard-stats';
+
 import { UpdateProductQuantities } from '../controllers/products';
 
 const orders = express.Router();
@@ -20,6 +22,20 @@ orders.post('/placeOrder', async (req, res) => {
         await UpdateProductQuantities(placedOrders.products);
 
         res.send(placedOrders.products);
+    } catch (error) {
+        res.send(error);
+    }
+});
+
+orders.get('/getStats', async (req, res) => {
+    try {
+        if(!req.body)
+            throw new Error('error while placing order');
+
+        const stats = await DashboardStats.find({});
+        console.log({ stats });
+
+        res.send(stats);
     } catch (error) {
         res.send(error);
     }
