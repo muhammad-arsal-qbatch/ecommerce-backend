@@ -1,4 +1,5 @@
 import express from 'express';
+import path from 'path';
 
 import auth from './auth';
 import user from './user'
@@ -13,5 +14,7 @@ router.use('/users', user);
 router.use('/products', products);
 router.use('/orders', orders);
 router.use('/', nonAuthenticatedRouter);
+
+router.use('/uploads',express.static(path.join(__dirname,'../uploads')))
 
 export default router;

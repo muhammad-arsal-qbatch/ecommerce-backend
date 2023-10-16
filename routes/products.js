@@ -13,18 +13,30 @@ const products = express.Router();
 
 const storage = multer.diskStorage({
     destination: function (req, file, callback) {
-        callback(null, 'uploads');
+        // console.log({req,file});
+        callback(null, 'uploads/');
     },
     filename: function (req, file, callback) {
+        // console.log({req,file});
         callback(null, Date.now() + '-' + file.originalname);
     }
 });
 
 const upload = multer({ storage: storage });
 
-products.post('/addProduct', upload.array('images', 5), async (req, res) => {
+products.post('/addProduct', upload.any(), async (req, res) => {
     try {
-        const response = await AddProduct(req.body.newProduct);
+        console.log('files is', req.files);
+        console.log(req.images);
+        let upDatedProduct = req.body.newProduct;
+        upDatedProduct.images = [];
+
+        req.body.newProduct.images =[];
+        req.files.map((updatedImagesPath) => {
+            upDatedProduct.images.push(updatedImagesPath.path);
+        });
+        // console.log('final product is, ', req.body.newProduct);
+        const response = await AddProduct(upDatedProduct);
 
         if (response.error) {
             return res.send({ error: response.error });

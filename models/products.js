@@ -17,7 +17,6 @@ const products = mongoose.Schema(
             required: true
         },
         images:Array,
-        thumbnail:String,
         totalSold: {
             type: Number,
             default: 0
