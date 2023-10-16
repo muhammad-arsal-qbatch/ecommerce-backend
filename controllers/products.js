@@ -17,6 +17,7 @@ const AddProduct = async (prod) => {
 
 const GetProducts = async (offset, limit) => {
     try{
+        console.log('offset and limit are, ', offset, limit);
         const myProducts = await Product.find({}).skip(offset).limit(limit);
 
         return { myProducts };
@@ -34,25 +35,29 @@ const DeleteProduct = async (product) => {
     }
 }
 const EditProduct = async (editedProduct) => {
-    try{
-        const updatedProduct= {};
-        for(const key in editedProduct) {
-            if(
-                editedProduct[key] === ''
-             || editedProduct[key].length === 0
-             || editedProduct[key] === null
-            ){ /* empty */ }
-            else{
+    try {
+        const updatedProduct = {};
+        console.log('final', editedProduct);
+        for (const key in editedProduct) {
+            if (
+                editedProduct[key] === '' ||
+                editedProduct[key].length === 0 ||
+                editedProduct[key] === null
+            ) {
+                /* empty */
+            } else {
                 updatedProduct[key] = editedProduct[key];
             }
         }
-        const updatedObject = await Product.findByIdAndUpdate(editedProduct.id,updatedProduct,{ new: true });
-        return {updatedObject}
+        console.log('final edited product, ', updatedProduct); // Fix here
 
-    } catch(error){
-        return { error: 'Product not found or could not be updated.' }
+        const updatedObject = await Product.findByIdAndUpdate(editedProduct.id, updatedProduct, { new: true });
+        return { updatedObject };
+
+    } catch (error) {
+        return { error: 'Product not found or could not be updated.' };
     }
-}
+};
 
 const UpdateProductQuantities = async (products) => {
     try {

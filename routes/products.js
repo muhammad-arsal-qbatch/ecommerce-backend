@@ -1,5 +1,7 @@
 import express from 'express';
 import multer from 'multer';
+import passport from 'passport';
+
 
 import { AddProduct } from '../controllers';
 import {
@@ -24,7 +26,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-products.post('/addProduct', upload.any(), async (req, res) => {
+products.post('/addProduct',passport.authenticate('jwt', { session:false }), upload.any(), async (req, res) => {
     try {
         console.log('files is', req.files);
         console.log(req.images);
@@ -51,29 +53,44 @@ products.post('/addProduct', upload.any(), async (req, res) => {
 
 products.get('/getProducts', async (req,res) => {
     try{
+        console.log('reequ', req.query);
         const response  = await GetProducts(req.query.offset||0, req.query.limit||30);
-
+        console.log(response);
         res.send({response});
     } catch(error) {
+        console.log('inside errror');
         res.send({ error });
     }
 })
 
-products.put('/editProduct', async (req,res) => {
+products.put('/editProduct',passport.authenticate('jwt', { session:false }),upload.any(), async (req,res) => {
     try{
-        const response = await EditProduct(req.body)
+        console.log('inside edi');
+        console.log('req.files are ', req);
+        let updatedProduct = req.body.newProduct;
+        console.log('EDITEDPRODCT; ,', req.body.newProduct);
+        updatedProduct.images = [];
+
+        req.body.newProduct.images =[];
+        req.files.map((updatedImagesPath) => {
+            console.log(updatedImagesPath);
+            updatedProduct.images.push(updatedImagesPath.path);
+        });
+        console.log('final, ', updatedProduct)
+        const response = await EditProduct(updatedProduct)
         if(response.error) {
             return res.send({ error:response.error })
         }
-        res.send({response});
+        res.send(response);
 
     } catch(error) {
         res.send({ error })
     }
 })
 
-products.delete('/deleteProduct', async (req,res) => {
+products.delete('/deleteProduct',passport.authenticate('jwt', { session:false }), async (req,res) => {
     try{
+        console.log(req.body.product)
         const response = await DeleteProduct(req.body.product);
 
         return res.send(response);
@@ -84,7 +101,7 @@ products.delete('/deleteProduct', async (req,res) => {
 
 })
 
-products.get('/getTopSellingProducts', async (req, res) => {
+products.get('/getTopSellingProducts',passport.authenticate('jwt', { session:false }), async (req, res) => {
     try{
         const response = await GetTopSellingProducts();
 

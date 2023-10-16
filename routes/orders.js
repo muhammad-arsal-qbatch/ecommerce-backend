@@ -1,4 +1,5 @@
 import express from 'express';
+import passport from 'passport';
 
 import {
     DeliverOrder,
@@ -13,7 +14,7 @@ import { UpdateProductQuantities } from '../controllers/products';
 
 const orders = express.Router();
 
-orders.post('/placeOrder', async (req, res) => {
+orders.post('/placeOrder',passport.authenticate('jwt', { session:false }), async (req, res) => {
     try {
         if(!req.body)
             throw new Error('error while placing order');
@@ -27,10 +28,10 @@ orders.post('/placeOrder', async (req, res) => {
     }
 });
 
-orders.get('/getStats', async (req, res) => {
+orders.get('/getStats',passport.authenticate('jwt', { session:false }), async (req, res) => {
     try {
-        if(!req.body)
-            throw new Error('error while placing order');
+        // if(!req.body)
+        //     throw new Error('error while placing order');
 
         const stats = await DashboardStats.find({});
         console.log({ stats });
@@ -41,7 +42,7 @@ orders.get('/getStats', async (req, res) => {
     }
 });
 
-orders.get('/getOrders', async (req, res) => {
+orders.get('/getOrders',passport.authenticate('jwt', { session:false }), async (req, res) => {
     try {
         if(!req.query.userId)
             throw new Error('Error while getting order');
@@ -56,7 +57,7 @@ orders.get('/getOrders', async (req, res) => {
     }
 });
 
-orders.get('/getOrdersInGroup', async (req, res) => {
+orders.get('/getOrdersInGroup',passport.authenticate('jwt', { session:false }), async (req, res) => {
     try {
         const response = await GetOrdersInGroup();
 
@@ -66,7 +67,7 @@ orders.get('/getOrdersInGroup', async (req, res) => {
     }
 });
 
-orders.get('/getOrdersByUserId', async (req, res) => {
+orders.get('/getOrdersByUserId',passport.authenticate('jwt', { session:false }), async (req, res) => {
     try {
         const response = await GetOrders();
         res.send(response);
@@ -75,7 +76,7 @@ orders.get('/getOrdersByUserId', async (req, res) => {
     }
 });
 
-orders.put('/deliverOrder', async (req, res) => {
+orders.put('/deliverOrder',passport.authenticate('jwt', { session:false }), async (req, res) => {
     try {
         const response = await DeliverOrder(req.body);
 

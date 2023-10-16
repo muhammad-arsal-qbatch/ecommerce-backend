@@ -14,6 +14,7 @@ import { UpdateDeliveryAddress } from '../controllers/orders';
 const router = express.Router();
 
 router.get('/orders', passport.authenticate('jwt', { session:false }), async (req, res) => {
+    console.log('token ', req.token);
     res.send(req.token);
 });
 router.post('/addDeliveryAddress', async (req, res) => {
