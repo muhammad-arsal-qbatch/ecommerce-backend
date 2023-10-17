@@ -1,7 +1,14 @@
 import express from 'express';
+import passport from 'passport';
 
-import { SignIn, SignUp } from '../controllers';
+import { SignIn,
+    SignUp,
+    ForgotPassword,
+} from '../controllers';
+
+import { HashPassword } from '../middlewares/auth';
 import { GenerateToken } from '../middlewares/auth';
+import User from '../models/user';
 // import CatchResponse from '../utils/catch-response';
 
 const router = express.Router();
@@ -55,6 +62,35 @@ router.post('/signup', async (req,res) => {
         res.send(user);
     }catch (err) {
         res.status(500).send({ error: err.message });
+    }
+})
+
+router.post('/forgotPassword', async(req, res) => {
+    try{
+        console.log(req.body);
+        await ForgotPassword(req.body);
+        res.send(req.body);
+    } catch (err) {
+        console.log('errrororo', err);
+        res.status(400).send({error: err.message});
+    }
+})
+
+router.post('/resetPassword',passport.authenticate('jwt', { session:false }), async(req, res) => {
+    try{
+        const newPassword = req.body.newPassword
+        const email = req.user[0].email;
+        console.log('email', email);
+        console.log('new password ', newPassword);
+        const hashedPassword = await HashPassword(newPassword);
+
+        // Update the user's password in the database
+        await User.findOneAndUpdate({ email }, { password: hashedPassword });
+        // await ForgotPassword(req.body);
+        res.send(req.body);
+    } catch (err) {
+        console.log('errrororo', err);
+        res.status(400).send({error: err.message});
     }
 })
 
