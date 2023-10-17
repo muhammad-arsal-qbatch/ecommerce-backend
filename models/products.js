@@ -6,8 +6,8 @@ const products = mongoose.Schema(
             type: String,
             required: true
         },
-        size: Array,
-        color: Array,
+        size: String,
+        color: String,
         price: {
             type: Number,
             required: true
@@ -20,6 +20,10 @@ const products = mongoose.Schema(
         totalSold: {
             type: Number,
             default: 0
+        },
+        date: {
+            type: Date,
+            default: Date.now
         }
 
     }

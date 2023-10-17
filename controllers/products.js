@@ -19,6 +19,27 @@ const GetProducts = async (offset, limit, search, filterCode) => {
     try{
         console.log('offset and limit are, ', offset, limit, filterCode);
         console.log(typeof(filterCode));
+        if(filterCode === '0')
+        {
+            const myProducts = await Product.find({ size: 'XS' });
+            return { myProducts}
+        }
+        if(filterCode === '1')
+        {
+            const myProducts = await Product.find({ size: 'S' });
+            console.log('products are  ', myProducts);
+            return { myProducts}
+        }
+        if(filterCode === '2')
+        {
+            const myProducts = await Product.find({ size: 'M' });
+            return { myProducts}
+        }
+        if(filterCode === '3')
+        {
+            const myProducts = await Product.find({ size: 'L' });
+            return { myProducts}
+        }
         if(filterCode === '4')
         {
             const myProducts = await Product.find().where('price').gte(0).lte(20);
@@ -48,6 +69,49 @@ const GetProducts = async (offset, limit, search, filterCode) => {
             const myProducts = await Product.find().sort({price: -1});
             return { myProducts}
         }
+        if(filterCode === '9')
+        {
+            console.log('huihuihui');
+
+            const myProducts = await Product.find().sort({date: -1});
+            return { myProducts}
+        }
+        if(filterCode === '10')
+        {
+            console.log('huihuih10010ui');
+
+            const myProducts = await Product.find({color: 'black'})
+            return { myProducts}
+        }
+        if(filterCode === '11')
+        {
+            console.log('huihuihui');
+
+            const myProducts = await Product.find({color: 'darkred'})
+            return { myProducts}
+        }
+        if(filterCode === '12')
+        {
+            console.log('huihuihui');
+
+            const myProducts = await Product.find({color: 'darkgreen'})
+            return { myProducts}
+        }
+        if(filterCode === '13')
+        {
+            console.log('huihuihui');
+
+            const myProducts = await Product.find({color: 'grey'})
+            return { myProducts}
+        }
+        if(filterCode === '14')
+        {
+            console.log('huihuihui');
+
+            const myProducts = await Product.find({color: 'darkblue'})
+            return { myProducts}
+        }
+
         const selector = {};
 
         if (search !== ''){
