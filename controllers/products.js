@@ -15,10 +15,47 @@ const AddProduct = async (prod) => {
     }
 }
 
-const GetProducts = async (offset, limit) => {
+const GetProducts = async (offset, limit, search, filterCode) => {
     try{
-        console.log('offset and limit are, ', offset, limit);
-        const myProducts = await Product.find({}).skip(offset).limit(limit);
+        console.log('offset and limit are, ', offset, limit, filterCode);
+        console.log(typeof(filterCode));
+        if(filterCode === '4')
+        {
+            const myProducts = await Product.find().where('price').gte(0).lte(20);
+            return { myProducts}
+        }
+        if(filterCode === '5')
+        {
+            const myProducts = await Product.find().where('price').gte(20).lte(40);
+            return { myProducts}
+        }
+        if(filterCode === '6')
+        {
+            const myProducts = await Product.find().where('price').gte(40).lte(10000);
+            return { myProducts}
+        }
+        if(filterCode === '7')
+        {
+            console.log('huihuihui');
+            const myProducts = await Product.find().sort('price');
+
+            return { myProducts}
+        }
+        if(filterCode === '8')
+        {
+            console.log('huihuihui');
+
+            const myProducts = await Product.find().sort({price: -1});
+            return { myProducts}
+        }
+        const selector = {};
+
+        if (search !== ''){
+            const regex = new RegExp('^' + search, 'i');
+            selector.productName = { $regex: regex };
+        }
+        const myProducts = await Product.find(selector).skip(offset).limit(limit);
+
 
         return { myProducts };
     } catch(error) {
