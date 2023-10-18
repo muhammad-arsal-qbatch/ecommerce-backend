@@ -4,13 +4,12 @@ import passport from 'passport';
 import {
     DeliverOrder,
     GetOrders,
-    GetOrdersInGroup,
     PlaceOrder
-} from '../controllers/orders';
+} from '../controllers';
+
+import { UpdateProductQuantities } from '../controllers';
 
 import DashboardStats from '../models/dashboard-stats';
-
-import { UpdateProductQuantities } from '../controllers/products';
 
 const orders = express.Router();
 
@@ -30,9 +29,6 @@ orders.post('/placeOrder',passport.authenticate('jwt', { session:false }), async
 
 orders.get('/getStats',passport.authenticate('jwt', { session:false }), async (req, res) => {
     try {
-        // if(!req.body)
-        //     throw new Error('error while placing order');
-
         const stats = await DashboardStats.find({});
         console.log({ stats });
 
@@ -48,10 +44,7 @@ orders.get('/getOrders',passport.authenticate('jwt', { session:false }), async (
             userId = {},
             sortingObj = {}
         } = req.query
-        console.log(' user id isss,  ', userId)
-        console.log(' sorting object,  ', sortingObj)
         const response = await GetOrders(userId, sortingObj);
-        console.log('responsee is, ', response)
 
         res.send(response);
     } catch (error) {
@@ -60,15 +53,6 @@ orders.get('/getOrders',passport.authenticate('jwt', { session:false }), async (
     }
 });
 
-orders.get('/getOrdersInGroup',passport.authenticate('jwt', { session:false }), async (req, res) => {
-    try {
-        const response = await GetOrdersInGroup();
-
-        res.send(response);
-    } catch (error) {
-        res.status(401).send({ error: error.message });
-    }
-});
 
 orders.get('/getOrdersByUserId',passport.authenticate('jwt', { session:false }), async (req, res) => {
     try {

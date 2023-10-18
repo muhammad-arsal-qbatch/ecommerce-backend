@@ -2,85 +2,71 @@ import Orders from '../models/orders';
 import User from '../models/user';
 
 const PlaceOrder = async (order) => {
-    try{
+    try {
         console.log(order);
         const finalOrder = await GetFinalOrder(order);
         console.log({ finalOrder });
         await Orders.insertMany(finalOrder);
 
         return finalOrder;
-    }catch(error) {
-        console.log(error)
+    } catch (error) {
+        console.log(error);
     }
-}
+};
 
 const GetOrders = async (userId, sortingObj) => {
-    try{
+    try {
         console.log('use id in finals ,,, ', userId);
         const orders = await Orders.find(userId).sort(sortingObj);
         console.log('orderss in final areeee', orders);
 
         return orders;
-    } catch(error) {
+    } catch (error) {
         console.log({ error });
     }
-}
-const GetOrdersInGroup = async () => {
-    try{
-        const orders = await Orders.aggregate([
-            {
-                $sort: {
-                    orderId: -1
-                }
-            }
-        ]);
-
-        return {orders};
-    } catch(error) {
-        throw new Error('error while fetching orderss');
-    }
-}
+};
 
 const GetFinalOrder = async (order) => {
-    try{
-        const latestOrder = await Orders.findOne().sort({ date: -1 }).select('orderId').exec();
-        if(latestOrder)
-        {
-            order.orderId = latestOrder.orderId+1;
-        }
-        else{
+    try {
+        const latestOrder = await Orders.findOne()
+            .sort({ date: -1 })
+            .select('orderId')
+            .exec();
+        if (latestOrder) {
+            order.orderId = latestOrder.orderId + 1;
+        } else {
             order.orderId = 100;
         }
         var totalAmount = 0;
         order.products.map((product) => {
-            totalAmount += (product.quantity * product.price);
-        })
+            totalAmount += product.quantity * product.price;
+        });
         order.totalAmount = totalAmount;
 
         return order;
-    } catch(error) {
+    } catch (error) {
         console.log(error);
     }
-}
+};
 
 const DeliverOrder = async (order) => {
-    try{
+    try {
         const updatedOrder = await Orders.findOneAndUpdate(
             { orderId: order.orderId },
             {
-                delivered: 'Delivered'
+                delivered: 'Delivered',
             },
             { new: true }
-        )
+        );
 
         return updatedOrder;
-    } catch(error) {
+    } catch (error) {
         throw new Error('Order cannot be delivered');
     }
-}
+};
 
 const UpdateDeliveryAddress = async ({ userId, body }) => {
-    try{
+    try {
         const user = await User.findOne({ _id: userId });
         if (!user) {
             return { error: 'User not found' };
@@ -89,12 +75,12 @@ const UpdateDeliveryAddress = async ({ userId, body }) => {
         await user.save();
 
         return user;
-    } catch(error) {
+    } catch (error) {
         return { error };
     }
-}
+};
 const UpdatePaymentMethod = async ({ userId, body }) => {
-    try{
+    try {
         const user = await User.findOne({ _id: userId });
         if (!user) {
             return { error: 'User not found' };
@@ -103,17 +89,16 @@ const UpdatePaymentMethod = async ({ userId, body }) => {
         await user.save();
 
         return user;
-    } catch(error) {
+    } catch (error) {
         return { error };
     }
-}
+};
 
 export {
     PlaceOrder,
     GetOrders,
     GetFinalOrder,
-    GetOrdersInGroup,
     DeliverOrder,
     UpdateDeliveryAddress,
-    UpdatePaymentMethod
+    UpdatePaymentMethod,
 };

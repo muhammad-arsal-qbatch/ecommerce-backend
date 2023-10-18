@@ -1,7 +1,8 @@
 import express from 'express';
 import passport from 'passport';
 
-import { SignIn,
+import {
+    SignIn,
     SignUp,
     ForgotPassword,
 } from '../controllers';
@@ -9,7 +10,6 @@ import { SignIn,
 import { HashPassword } from '../middlewares/auth';
 import { GenerateToken } from '../middlewares/auth';
 import User from '../models/user';
-// import CatchResponse from '../utils/catch-response';
 
 const router = express.Router();
 

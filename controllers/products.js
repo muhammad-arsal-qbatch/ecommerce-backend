@@ -17,60 +17,6 @@ const AddProduct = async (prod) => {
 
 const GetProducts = async (offset, limit, search, filterObj, sortingObj) => {
     try{
-        console.log('offset and limit are, ', offset, limit, filterObj, sortingObj);
-        // console.log(typeof(filterCode));
-        // if(filterObj.filterCode === '0')
-        // {
-        //     const myProducts = await Product.find({ size: filterObj.filterAction });
-        //     return { myProducts}
-        // }
-        // if(filterObj.filterCode === '1')
-        // {
-        //     const myProducts = await Product.find({ color: filterObj.filterAction });
-        //     console.log('products are  ', myProducts);
-        //     return { myProducts}
-        // }
-        // if(filterObj.filterCode === '2')
-        // {
-        //     if(filterObj.filterAction === '0'){
-        //         console.log('huifuiodsufs 00 ');
-
-        //         const myProducts = await Product.find().where('price').gte(0).lte(20);
-        //         return { myProducts}
-        //     }
-        //     if(filterObj.filterAction === '1'){
-        //         console.log('huifuiodsufs');
-        //         const myProducts = await Product.find().where('price').gte(20).lte(40);
-        //         return { myProducts}
-        //     }
-        //     if(filterObj.filterAction === '2'){
-
-        //         const myProducts = await Product.find().where('price').gte(40).lte(10000);
-        //         return { myProducts}
-        //     }
-
-        // }
-        // if(filterObj.filterCode === '3')
-        // {
-        //     if(filterObj.filterAction === '0'){
-        //         console.log('inside price low');
-        //         const myProducts = await Product.find().sort('price');
-
-        //         return { myProducts}
-        //     }
-        //     if(filterObj.filterAction === '1'){
-        //         console.log('huifuiodsufs');
-        //         const myProducts = await Product.find().sort({price: -1});
-        //         return { myProducts}
-        //     }
-        //     if(filterObj.filterAction === '2'){
-
-        //         const myProducts = await Product.find().sort({date: -1});
-        //         return { myProducts}
-        //     }
-
-        // }
-
         let selector = {};
 
         if (filterObj?.price) {
@@ -84,9 +30,7 @@ const GetProducts = async (offset, limit, search, filterObj, sortingObj) => {
             const regex = new RegExp('^' + search, 'i');
             selector.productName = { $regex: regex };
         }
-        console.log('\n\n', 'selector', selector)
         const myProducts = await Product.find(selector).sort(sortingObj).skip(offset).limit(limit);
-
 
         return { myProducts };
     } catch(error) {
