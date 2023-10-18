@@ -14,9 +14,11 @@ const PlaceOrder = async (order) => {
     }
 }
 
-const GetOrders = async ({ userId }) => {
+const GetOrders = async (userId, sortingObj) => {
     try{
-        const orders = await Orders.find({ userId: userId }, { productId: 0 });
+        console.log('use id in finals ,,, ', userId);
+        const orders = await Orders.find(userId).sort(sortingObj);
+        console.log('orderss in final areeee', orders);
 
         return orders;
     } catch(error) {
@@ -26,29 +28,6 @@ const GetOrders = async ({ userId }) => {
 const GetOrdersInGroup = async () => {
     try{
         const orders = await Orders.aggregate([
-            {
-                $group: {
-                    _id: '$orderId',
-                    totalQuantity: { $sum: '$totalQuantity' },
-                    userName: { $addToSet: '$userName' },
-                    date: { $addToSet: '$date' },
-                    totalAmount: { $addToSet: '$totalAmount' },
-                    status: { $addToSet: '$status' },
-                    delivered: { $addToSet: '$delivered' }
-                }
-            },
-            {
-                $project: {
-                    _id: 0,
-                    orderId: '$_id',
-                    totalQuantity: 1,
-                    userName: 1,
-                    date: 1,
-                    totalAmount: 1,
-                    status: 1,
-                    delivered: 1
-                }
-            },
             {
                 $sort: {
                     orderId: -1
@@ -114,6 +93,20 @@ const UpdateDeliveryAddress = async ({ userId, body }) => {
         return { error };
     }
 }
+const UpdatePaymentMethod = async ({ userId, body }) => {
+    try{
+        const user = await User.findOne({ _id: userId });
+        if (!user) {
+            return { error: 'User not found' };
+        }
+        user.selectedPaymentMethod = body;
+        await user.save();
+
+        return user;
+    } catch(error) {
+        return { error };
+    }
+}
 
 export {
     PlaceOrder,
@@ -121,5 +114,6 @@ export {
     GetFinalOrder,
     GetOrdersInGroup,
     DeliverOrder,
-    UpdateDeliveryAddress
+    UpdateDeliveryAddress,
+    UpdatePaymentMethod
 };

@@ -53,8 +53,21 @@ products.post('/addProduct',passport.authenticate('jwt', { session:false }), upl
 
 products.get('/getProducts', async (req,res) => {
     try{
-        console.log('reequ', req.query.filterCode);
-        const response  = await GetProducts(req.query.offset||0, req.query.limit, req.query.search || '', req.query.filterCode);
+        const {
+            offset,
+            limit,
+            search,
+            filterObj = {},
+            sortingObj = {}
+        } = req.query
+        console.log('reequ', req.query);
+        const response  = await GetProducts(
+            offset,
+            limit,
+            search,
+            filterObj,
+            sortingObj
+        );
         // console.log(response);
         res.send({response});
     } catch(error) {

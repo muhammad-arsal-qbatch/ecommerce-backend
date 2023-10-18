@@ -14,7 +14,7 @@ const AddDeliveryAddress = async (body) => {
         singleUser.deliveryAddress.push(deliveryPerson);
         await singleUser.save();
 
-        return singleUser.deliveryAddress;
+        return singleUser;
     } catch(err) {
         throw new Error(err);
     }
@@ -32,7 +32,7 @@ const AddPaymentMethod = async (body) => {
         singleUser.paymentMethods.push(paymentMethod);
         await singleUser.save();
 
-        return singleUser.paymentMethods;
+        return singleUser;
     } catch(err) {
         throw new Error(err);
     }

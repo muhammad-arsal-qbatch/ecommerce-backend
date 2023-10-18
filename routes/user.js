@@ -9,7 +9,7 @@ import {
     GetDeliveryAddress
 } from '../controllers/delivery-person';
 
-import { UpdateDeliveryAddress } from '../controllers/orders';
+import { UpdateDeliveryAddress, UpdatePaymentMethod } from '../controllers/orders';
 
 const router = express.Router();
 
@@ -41,7 +41,14 @@ router.put('/updateDeliveryPerson', async (req, res) => {
         res.status(400).send(err);
     }
 })
-
+router.put('/updatePaymentMethod', async (req, res) => {
+    try{
+        const resposne = await UpdatePaymentMethod(req.body)
+        res.send(resposne);
+    } catch(err) {
+        res.status(400).send(err);
+    }
+})
 router.get('/getDeliveryAddress', async (req, res) => {
     try{
         const resposne = await GetDeliveryAddress(req.query)

@@ -15,110 +15,77 @@ const AddProduct = async (prod) => {
     }
 }
 
-const GetProducts = async (offset, limit, search, filterCode) => {
+const GetProducts = async (offset, limit, search, filterObj, sortingObj) => {
     try{
-        console.log('offset and limit are, ', offset, limit, filterCode);
-        console.log(typeof(filterCode));
-        if(filterCode === '0')
-        {
-            const myProducts = await Product.find({ size: 'XS' });
-            return { myProducts}
-        }
-        if(filterCode === '1')
-        {
-            const myProducts = await Product.find({ size: 'S' });
-            console.log('products are  ', myProducts);
-            return { myProducts}
-        }
-        if(filterCode === '2')
-        {
-            const myProducts = await Product.find({ size: 'M' });
-            return { myProducts}
-        }
-        if(filterCode === '3')
-        {
-            const myProducts = await Product.find({ size: 'L' });
-            return { myProducts}
-        }
-        if(filterCode === '4')
-        {
-            const myProducts = await Product.find().where('price').gte(0).lte(20);
-            return { myProducts}
-        }
-        if(filterCode === '5')
-        {
-            const myProducts = await Product.find().where('price').gte(20).lte(40);
-            return { myProducts}
-        }
-        if(filterCode === '6')
-        {
-            const myProducts = await Product.find().where('price').gte(40).lte(10000);
-            return { myProducts}
-        }
-        if(filterCode === '7')
-        {
-            console.log('huihuihui');
-            const myProducts = await Product.find().sort('price');
+        console.log('offset and limit are, ', offset, limit, filterObj, sortingObj);
+        // console.log(typeof(filterCode));
+        // if(filterObj.filterCode === '0')
+        // {
+        //     const myProducts = await Product.find({ size: filterObj.filterAction });
+        //     return { myProducts}
+        // }
+        // if(filterObj.filterCode === '1')
+        // {
+        //     const myProducts = await Product.find({ color: filterObj.filterAction });
+        //     console.log('products are  ', myProducts);
+        //     return { myProducts}
+        // }
+        // if(filterObj.filterCode === '2')
+        // {
+        //     if(filterObj.filterAction === '0'){
+        //         console.log('huifuiodsufs 00 ');
 
-            return { myProducts}
-        }
-        if(filterCode === '8')
-        {
-            console.log('huihuihui');
+        //         const myProducts = await Product.find().where('price').gte(0).lte(20);
+        //         return { myProducts}
+        //     }
+        //     if(filterObj.filterAction === '1'){
+        //         console.log('huifuiodsufs');
+        //         const myProducts = await Product.find().where('price').gte(20).lte(40);
+        //         return { myProducts}
+        //     }
+        //     if(filterObj.filterAction === '2'){
 
-            const myProducts = await Product.find().sort({price: -1});
-            return { myProducts}
-        }
-        if(filterCode === '9')
-        {
-            console.log('huihuihui');
+        //         const myProducts = await Product.find().where('price').gte(40).lte(10000);
+        //         return { myProducts}
+        //     }
 
-            const myProducts = await Product.find().sort({date: -1});
-            return { myProducts}
-        }
-        if(filterCode === '10')
-        {
-            console.log('huihuih10010ui');
+        // }
+        // if(filterObj.filterCode === '3')
+        // {
+        //     if(filterObj.filterAction === '0'){
+        //         console.log('inside price low');
+        //         const myProducts = await Product.find().sort('price');
 
-            const myProducts = await Product.find({color: 'black'})
-            return { myProducts}
-        }
-        if(filterCode === '11')
-        {
-            console.log('huihuihui');
+        //         return { myProducts}
+        //     }
+        //     if(filterObj.filterAction === '1'){
+        //         console.log('huifuiodsufs');
+        //         const myProducts = await Product.find().sort({price: -1});
+        //         return { myProducts}
+        //     }
+        //     if(filterObj.filterAction === '2'){
 
-            const myProducts = await Product.find({color: 'darkred'})
-            return { myProducts}
-        }
-        if(filterCode === '12')
-        {
-            console.log('huihuihui');
+        //         const myProducts = await Product.find().sort({date: -1});
+        //         return { myProducts}
+        //     }
 
-            const myProducts = await Product.find({color: 'darkgreen'})
-            return { myProducts}
-        }
-        if(filterCode === '13')
-        {
-            console.log('huihuihui');
+        // }
 
-            const myProducts = await Product.find({color: 'grey'})
-            return { myProducts}
-        }
-        if(filterCode === '14')
-        {
-            console.log('huihuihui');
+        let selector = {};
 
-            const myProducts = await Product.find({color: 'darkblue'})
-            return { myProducts}
+        if (filterObj?.price) {
+            selector = {
+                ...filterObj,
+                price: { $gte: Number(filterObj.price[0]), $lte: Number(filterObj.price[1]) }
+            }
         }
-
-        const selector = {};
 
         if (search !== ''){
             const regex = new RegExp('^' + search, 'i');
             selector.productName = { $regex: regex };
         }
-        const myProducts = await Product.find(selector).skip(offset).limit(limit);
+        console.log('\n\n', 'selector', selector)
+        const myProducts = await Product.find(selector).sort(sortingObj).skip(offset).limit(limit);
 
 
         return { myProducts };
@@ -187,9 +154,9 @@ const GetTopSellingProducts = async () => {
                 $group: {
                     _id: '$_id',
                     totalSold: { $sum: '$totalSold' },
-                    quantity: { $addToSet: '$quantity' },
-                    price: { $addToSet: '$price' },
-                    productName: { $addToSet: '$productName' },
+                    quantity: { $first: '$quantity' },
+                    price: { $first: '$price' },
+                    productName: { $first: '$productName' },
                 }
             },
             {

@@ -44,11 +44,14 @@ orders.get('/getStats',passport.authenticate('jwt', { session:false }), async (r
 
 orders.get('/getOrders',passport.authenticate('jwt', { session:false }), async (req, res) => {
     try {
-        if(!req.query.userId)
-            throw new Error('Error while getting order');
-
-        const userId = req.query.userId;
-        const response = await GetOrders({ userId });
+        const {
+            userId = {},
+            sortingObj = {}
+        } = req.query
+        console.log(' user id isss,  ', userId)
+        console.log(' sorting object,  ', sortingObj)
+        const response = await GetOrders(userId, sortingObj);
+        console.log('responsee is, ', response)
 
         res.send(response);
     } catch (error) {
