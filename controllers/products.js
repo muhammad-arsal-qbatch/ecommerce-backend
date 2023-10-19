@@ -25,18 +25,12 @@ const GetProducts = async (offset, limit, search, filterObj, sortingObj) => {
                 price: { $gte: Number(filterObj.price[0]), $lte: Number(filterObj.price[1]) }
             }
         }
-
         if (search !== ''){
             const regex = new RegExp('^' + search, 'i');
             selector.productName = { $regex: regex };
         }
-        const values = Object.values(sortingObj);
-
-        if (values.length !== 0) {
-            selector = {}
-        }
+        console.log('\n\n', 'selector', selector)
         const myProducts = await Product.find(selector).sort(sortingObj).skip(offset).limit(limit);
-
         return { myProducts };
     } catch(error) {
         throw new Error('error while getting the data', error)
