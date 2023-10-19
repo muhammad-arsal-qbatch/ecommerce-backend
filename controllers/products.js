@@ -30,6 +30,11 @@ const GetProducts = async (offset, limit, search, filterObj, sortingObj) => {
             const regex = new RegExp('^' + search, 'i');
             selector.productName = { $regex: regex };
         }
+        const values = Object.values(sortingObj);
+
+        if (values.length !== 0) {
+            selector = {}
+        }
         const myProducts = await Product.find(selector).sort(sortingObj).skip(offset).limit(limit);
 
         return { myProducts };
