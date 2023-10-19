@@ -49,7 +49,6 @@ const DeleteProduct = async (product) => {
 const EditProduct = async (editedProduct) => {
     try {
         const updatedProduct = {};
-        console.log('final', editedProduct);
         for (const key in editedProduct) {
             if (
                 editedProduct[key] === '' ||
@@ -61,8 +60,6 @@ const EditProduct = async (editedProduct) => {
                 updatedProduct[key] = editedProduct[key];
             }
         }
-        console.log('final edited product, ', updatedProduct); // Fix here
-
         const updatedObject = await Product.findByIdAndUpdate(editedProduct.id, updatedProduct, { new: true });
         return { updatedObject };
 
@@ -81,11 +78,8 @@ const UpdateProductQuantities = async (products) => {
                 foundProduct.totalSold += quantity;
 
                 await foundProduct.save();
-            } else {
-                console.log(`Product with _id ${ _id } not found.`);
-            }
+            } else { /* empty */ }
         }
-        console.log('Product quantities updated successfully.');
     } catch (error) {
         throw new Error('error while updating products quanitties');
     }

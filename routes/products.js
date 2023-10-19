@@ -26,6 +26,10 @@ const upload = multer({ storage: storage });
 products.post('/addProduct',passport.authenticate('jwt', { session:false }), upload.any(), async (req, res) => {
     try {
         let upDatedProduct = req.body.newProduct;
+        const {productName, price, quantity} = upDatedProduct;
+        if(productName === '' || price === '' || quantity === '')
+            throw new Error('Please provide all details');
+
         upDatedProduct.images = [];
         req.body.newProduct.images =[];
 
@@ -54,7 +58,6 @@ products.get('/getProducts', async (req,res) => {
             filterObj = {},
             sortingObj = {}
         } = req.query
-        console.log('reequ', req.query);
         const response  = await GetProducts(
             offset,
             limit,
@@ -75,7 +78,6 @@ products.put('/editProduct',passport.authenticate('jwt', { session:false }),uplo
         req.body.newProduct.images =[];
 
         req.files.map((updatedImagesPath) => {
-            console.log(updatedImagesPath);
             updatedProduct.images.push(updatedImagesPath.path);
         });
 

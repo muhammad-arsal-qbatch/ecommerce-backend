@@ -30,7 +30,6 @@ orders.post('/placeOrder',passport.authenticate('jwt', { session:false }), async
 orders.get('/getStats',passport.authenticate('jwt', { session:false }), async (req, res) => {
     try {
         const stats = await DashboardStats.find({});
-        console.log({ stats });
 
         res.send(stats);
     } catch (error) {
@@ -58,9 +57,7 @@ orders.get('/getOrdersByUserId',passport.authenticate('jwt', { session:false }),
     try {
         const response = await GetOrders();
         res.send(response);
-    } catch (error) {
-        console.log(error);
-    }
+    } catch (error) { /* empty */ }
 });
 
 orders.put('/deliverOrder',passport.authenticate('jwt', { session:false }), async (req, res) => {

@@ -67,11 +67,9 @@ router.post('/signup', async (req,res) => {
 
 router.post('/forgotPassword', async(req, res) => {
     try{
-        console.log(req.body);
         await ForgotPassword(req.body);
         res.send(req.body);
     } catch (err) {
-        console.log('errrororo', err);
         res.status(400).send({error: err.message});
     }
 })
@@ -80,8 +78,6 @@ router.post('/resetPassword',passport.authenticate('jwt', { session:false }), as
     try{
         const newPassword = req.body.newPassword
         const email = req.user[0].email;
-        console.log('email', email);
-        console.log('new password ', newPassword);
         const hashedPassword = await HashPassword(newPassword);
 
         // Update the user's password in the database
@@ -89,7 +85,6 @@ router.post('/resetPassword',passport.authenticate('jwt', { session:false }), as
         // await ForgotPassword(req.body);
         res.send(req.body);
     } catch (err) {
-        console.log('errrororo', err);
         res.status(400).send({error: err.message});
     }
 })

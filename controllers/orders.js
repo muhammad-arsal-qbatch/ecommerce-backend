@@ -3,27 +3,19 @@ import User from '../models/user';
 
 const PlaceOrder = async (order) => {
     try {
-        console.log(order);
         const finalOrder = await GetFinalOrder(order);
-        console.log({ finalOrder });
         await Orders.insertMany(finalOrder);
 
         return finalOrder;
-    } catch (error) {
-        console.log(error);
-    }
+    } catch (error) { /* empty */ }
 };
 
 const GetOrders = async (userId, sortingObj) => {
     try {
-        console.log('use id in finals ,,, ', userId);
         const orders = await Orders.find(userId).sort(sortingObj);
-        console.log('orderss in final areeee', orders);
 
         return orders;
-    } catch (error) {
-        console.log({ error });
-    }
+    } catch (error) { /* empty */ }
 };
 
 const GetFinalOrder = async (order) => {
@@ -44,9 +36,7 @@ const GetFinalOrder = async (order) => {
         order.totalAmount = totalAmount;
 
         return order;
-    } catch (error) {
-        console.log(error);
-    }
+    } catch (error) { /* empty */ }
 };
 
 const DeliverOrder = async (order) => {

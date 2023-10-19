@@ -19,7 +19,6 @@ nonAuthenticatedRouter.get('/script', async (req, res) => {
 
         res.send('OK');
     } catch (error) {
-        console.log(`Error: ${error}`);
         res.send(error.message);
     }
 });

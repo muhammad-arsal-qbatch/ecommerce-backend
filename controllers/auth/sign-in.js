@@ -23,7 +23,7 @@ const SignIn = async ({
         if (value) {
             return { user };
         } else {
-            throw new Error('User is not authorized' );
+            throw new Error('Invalid Credentials' );
         }
     }
 
