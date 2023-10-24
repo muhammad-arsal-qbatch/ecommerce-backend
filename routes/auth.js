@@ -67,8 +67,8 @@ router.post('/signup', async (req,res) => {
 
 router.post('/forgotPassword', async(req, res) => {
     try{
-        await ForgotPassword(req.body);
-        res.send(req.body);
+        const resetToken =  await ForgotPassword(req.body);
+        res.send(resetToken);
     } catch (err) {
         res.status(400).send({error: err.message});
     }
@@ -80,9 +80,7 @@ router.post('/resetPassword',passport.authenticate('jwt', { session:false }), as
         const email = req.user[0].email;
         const hashedPassword = await HashPassword(newPassword);
 
-        // Update the user's password in the database
         await User.findOneAndUpdate({ email }, { password: hashedPassword });
-        // await ForgotPassword(req.body);
         res.send(req.body);
     } catch (err) {
         res.status(400).send({error: err.message});

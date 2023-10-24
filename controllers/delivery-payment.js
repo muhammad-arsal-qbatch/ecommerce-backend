@@ -18,7 +18,7 @@ const AddDeliveryAddress = async (body) => {
     } catch(err) {
         throw new Error(err);
     }
-}
+};
 
 const AddPaymentMethod = async (body) => {
     try {
@@ -36,7 +36,7 @@ const AddPaymentMethod = async (body) => {
     } catch(err) {
         throw new Error(err);
     }
-}
+};
 
 const GetDeliveryAddress = async ({ userId }) => {
     try{
@@ -46,7 +46,7 @@ const GetDeliveryAddress = async ({ userId }) => {
     } catch(err) {
         throw new Error(err);
     }
-}
+};
 
 const GetPaymentMethod = async ({ userId }) => {
     try{
@@ -56,7 +56,7 @@ const GetPaymentMethod = async ({ userId }) => {
     } catch(err) {
         throw new Error(err);
     }
-}
+};
 
 const GetAllDeliveryAddress = async ({ userId }) => {
     try{
@@ -66,7 +66,7 @@ const GetAllDeliveryAddress = async ({ userId }) => {
     } catch(err) {
         throw new Error(err);
     }
-}
+};
 
 const GetAllPaymentMethods = async ({ userId }) => {
     try{
@@ -76,7 +76,7 @@ const GetAllPaymentMethods = async ({ userId }) => {
     } catch (err) {
         throw new Error(err);
     }
-}
+};
 
 export {
     AddDeliveryAddress,

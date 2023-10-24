@@ -9,7 +9,6 @@ import {
 
 import { UpdateProductQuantities } from '../controllers';
 
-import DashboardStats from '../models/dashboard-stats';
 
 const orders = express.Router();
 
@@ -22,16 +21,6 @@ orders.post('/placeOrder',passport.authenticate('jwt', { session:false }), async
         await UpdateProductQuantities(placedOrders.products);
 
         res.send(placedOrders.products);
-    } catch (error) {
-        res.send(error);
-    }
-});
-
-orders.get('/getStats',passport.authenticate('jwt', { session:false }), async (req, res) => {
-    try {
-        const stats = await DashboardStats.find({});
-
-        res.send(stats);
     } catch (error) {
         res.send(error);
     }
@@ -51,7 +40,6 @@ orders.get('/getOrders',passport.authenticate('jwt', { session:false }), async (
         res.send(error);
     }
 });
-
 
 orders.get('/getOrdersByUserId',passport.authenticate('jwt', { session:false }), async (req, res) => {
     try {

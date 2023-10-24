@@ -10,17 +10,12 @@ const SignIn = async ({
     if(!user)
         throw new Error('Please create account first' );
 
-    if(user.name === 'admin' )
-    {
-        if(user.password === password)
-        {
-            return { user }
-        }
-    }
-
     if (user) {
+        console.log('password and user password is, ', password, user.password);
         const value = await bcrypt.compare(password, user.password);
+        console.log('value is , ', value);
         if (value) {
+            console.log('inside true');
             return { user };
         } else {
             throw new Error('Invalid Credentials' );

@@ -15,6 +15,6 @@ router.use('/products', products);
 router.use('/orders', orders);
 router.use('/', nonAuthenticatedRouter);
 
-router.use('/uploads',express.static(path.join(__dirname,'../uploads')))
+router.use('/uploads',express.static(path.join(__dirname,'../uploads')));
 
 export default router;

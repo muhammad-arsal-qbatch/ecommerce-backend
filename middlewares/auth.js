@@ -18,7 +18,7 @@ const HashPassword = async (password) => {
 };
 
 const GenerateToken = (email) => {
-    const token = jwt.sign({ email } , secretKey, { expiresIn: '10000s' })
+    const token = jwt.sign({ email } , secretKey, { expiresIn: '100000s' })
 
     return token;
 }

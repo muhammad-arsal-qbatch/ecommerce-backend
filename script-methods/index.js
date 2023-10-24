@@ -8,7 +8,6 @@ const ScriptMethods = async ({
     console.log('\n\n', { rest });
 
     switch (method) {
-    // http://localhost:4000/script?method=StartDashboardJob
     case 'StartDashboardJob': {
         Agenda.create('create-dashboard-stats', {
             type: 'DashboardJob'

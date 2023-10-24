@@ -9,7 +9,7 @@ import {
     GetPaymentMethod,
     GetAllPaymentMethods,
     AddPaymentMethod
-} from './delivery-person';
+} from './delivery-payment';
 
 import {
     PlaceOrder,

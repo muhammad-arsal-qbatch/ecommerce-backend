@@ -25,11 +25,13 @@ const GetProducts = async (offset, limit, search, filterObj, sortingObj) => {
                 price: { $gte: Number(filterObj.price[0]), $lte: Number(filterObj.price[1]) }
             }
         }
+        else{
+            selector = { ...filterObj };
+        }
         if (search !== ''){
             const regex = new RegExp('^' + search, 'i');
             selector.productName = { $regex: regex };
         }
-        console.log('\n\n', 'selector', selector)
         const myProducts = await Product.find(selector).sort(sortingObj).skip(offset).limit(limit);
         return { myProducts };
     } catch(error) {
@@ -39,12 +41,14 @@ const GetProducts = async (offset, limit, search, filterObj, sortingObj) => {
 
 const DeleteProduct = async (product) => {
     try{
+        console.log('product in finak,, ', product);
         const obj = await Product.deleteOne({_id: product._id});
         return { obj };
     }catch(error) {
         return { 'error':'error while deleting the product' };
     }
 }
+
 const EditProduct = async (editedProduct) => {
     try {
         const updatedProduct = {};
@@ -120,7 +124,8 @@ const GetTopSellingProducts = async () => {
     } catch (error) {
         console.error(error);
         throw error;
-    }}
+}
+};
 
 export {
     AddProduct,

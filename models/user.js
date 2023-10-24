@@ -26,7 +26,7 @@ const user = mongoose.Schema({
     selectedPaymentMethod: {
         type: Number,
         default: 0
-    }
+    },
 })
 
 const User = mongoose.model('users', user, 'users')

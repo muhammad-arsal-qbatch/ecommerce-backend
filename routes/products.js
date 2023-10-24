@@ -1,6 +1,7 @@
 import express from 'express';
 import multer from 'multer';
 import passport from 'passport';
+import fs from 'fs';
 
 import {
     DeleteProduct,
@@ -9,6 +10,7 @@ import {
     GetTopSellingProducts,
     AddProduct
 } from '../controllers';
+import path from 'path';
 
 const products = express.Router();
 
@@ -76,10 +78,12 @@ products.put('/editProduct',passport.authenticate('jwt', { session:false }),uplo
         let updatedProduct = req.body.newProduct;
         updatedProduct.images = [];
         req.body.newProduct.images =[];
+        console.log('new product is,  ', req.body.newProduct);
 
         req.files.map((updatedImagesPath) => {
             updatedProduct.images.push(updatedImagesPath.path);
         });
+        console.log('updated product is, ', updatedProduct);
 
         const response = await EditProduct(updatedProduct)
         if(response.error) {
@@ -94,9 +98,21 @@ products.put('/editProduct',passport.authenticate('jwt', { session:false }),uplo
 
 products.delete('/deleteProduct',passport.authenticate('jwt', { session:false }), async (req,res) => {
     try{
-        const response = await DeleteProduct(req.body.product);
+        console.log('product,  ', req.body);
+        const response = await DeleteProduct(req.body);
+        req.body.images.map(async (singleImage) => {
+            const imagePath = path.join(__dirname,'..', singleImage);
+            console.log(imagePath);
+            fs.unlink(imagePath , (error) => {
+                if(error){
+                    console.log('error while deleting image from folder');
+                }
 
-        return res.send(response);
+            });
+
+        })
+
+        res.send(response);
     } catch(error) {
         res.send({ error })
     }

@@ -69,6 +69,7 @@ const UpdateDeliveryAddress = async ({ userId, body }) => {
         return { error };
     }
 };
+
 const UpdatePaymentMethod = async ({ userId, body }) => {
     try {
         const user = await User.findOne({ _id: userId });
