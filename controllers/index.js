@@ -6,7 +6,7 @@ import {
     AddDeliveryAddress,
     GetDeliveryAddress,
     GetAllDeliveryAddress,
-    GetPaymentMethod,
+    GetDefaultPaymentMethod,
     GetAllPaymentMethods,
     AddPaymentMethod
 } from './delivery-payment';
@@ -17,7 +17,6 @@ import {
     GetFinalOrder,
     DeliverOrder,
     UpdateDeliveryAddress,
-    UpdatePaymentMethod
 } from './orders';
 
 import {
@@ -36,7 +35,7 @@ export {
     AddDeliveryAddress,
     GetDeliveryAddress,
     GetAllDeliveryAddress,
-    GetPaymentMethod,
+    GetDefaultPaymentMethod,
     GetAllPaymentMethods,
     AddPaymentMethod,
     PlaceOrder,
@@ -44,7 +43,6 @@ export {
     GetFinalOrder,
     DeliverOrder,
     UpdateDeliveryAddress,
-    UpdatePaymentMethod,
     AddProduct,
     GetProducts,
     DeleteProduct,

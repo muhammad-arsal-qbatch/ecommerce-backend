@@ -14,8 +14,8 @@ ApplyMiddlewares(app);
 app.use('/', router);
 
 app.listen(PORT, async () => {
-    await AgendaJobs._ready;
-    AgendaJobs.start();
+  await AgendaJobs._ready;
+  AgendaJobs.start();
 
-    console.log(`app is listening to port ${ PORT }`);
+  console.log(`app is listening to port ${ PORT }`);
 });
