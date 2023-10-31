@@ -25,7 +25,8 @@ import {
     DeleteProduct,
     EditProduct,
     UpdateProductQuantities,
-    GetTopSellingProducts
+    GetTopSellingProducts,
+    ImportBulkProducts
 } from './products';
 
 export {
@@ -48,5 +49,6 @@ export {
     DeleteProduct,
     EditProduct,
     UpdateProductQuantities,
-    GetTopSellingProducts
+    GetTopSellingProducts,
+    ImportBulkProducts
 }

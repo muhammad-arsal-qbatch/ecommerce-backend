@@ -1,0 +1,23 @@
+[
+  { "color": "grey", "images": [], "price": 200, "productName": "wallet", "quantity": 20, "size": "M" },
+  { "color": "blue", "images": [], "price": 150, "productName": "backpack", "quantity": 10, "size": "L" },
+  { "color": "red", "images": [], "price": 50, "productName": "t-shirt", "quantity": 30, "size": "S" },
+  { "color": "black", "images": [], "price": 1000, "productName": "laptop", "quantity": 5, "size": "M" },
+  { "color": "green", "images": [], "price": 75, "productName": "sneakers", "quantity": 15, "size": "XXL" },
+  { "color": "green", "images": [], "price": 75, "productName": "sneakers", "quantity": 15, "size": "XXL" },
+  { "color": "yellow", "images": [], "price": 80, "productName": "hat", "quantity": 25, "size": "S" },
+  { "color": "white", "images": [], "price": 60, "productName": "jeans", "quantity": 12, "size": "M" },
+  { "color": "purple", "images": [], "price": 35, "productName": "umbrella", "quantity": 40, "size": "L" },
+  { "color": "red", "images": [], "price": 120, "productName": "sweater", "quantity": 18, "size": "M" },
+  { "color": "blue", "images": [], "price": 25, "productName": "socks", "quantity": 50, "size": "S" },
+  { "color": "pink", "images": [], "price": 70, "productName": "scarf", "quantity": 15, "size": "L" },
+  { "color": "brown", "images": [], "price": 90, "productName": "belt", "quantity": 25, "size": "L" },
+  { "color": "orange", "images": [], "price": 45, "productName": "hat", "quantity": 30, "size": "M" },
+  { "color": "navy", "images": [], "price": 140, "productName": "dress", "quantity": 8, "size": "S" },
+  { "color": "red", "images": [], "price": 200, "productName": "jacket", "quantity": 12, "size": "L" },
+  { "color": "green", "images": [], "price": 55, "productName": "gloves", "quantity": 20, "size": "XXL },
+  { "color": "black", "images": [], "price": 75, "productName": "hoodie", "quantity": 10, "size": "M" },
+  { "color": "gray", "images": [], "price": 110, "productName": "shorts", "quantity": 15, "size": "L" },
+  { "color": "blue", "images": [], "price": 65, "productName": "slippers", "quantity": 25, "size": "M" },
+  { "color": "purple", "images": [], "price": 35, "productName": "umbrella", "quantity": 40, "size": "L" }
+]

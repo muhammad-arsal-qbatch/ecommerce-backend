@@ -1,0 +1,7 @@
+[
+  { "color": "grey", "images": [], "price": 200, "productName": "wallet", "quantity": 20, "size": "M" },
+  { "color": "blue", "images": [], "price": 150, "productName": "backpack", "quantity": 10, "size": "L" },
+  { "color": "red", "images": [], "price": 50, "productName": "t-shirt", "quantity": 30, "size": "S" },
+  { "color": "black", "images": [], "price": 1000, "productName": "laptop", "quantity": 5, "size": "M" },
+  { "color": "green", "images": [], "price": 75, "productName": "sneakers", "quantity": 15, "size": "XXL" }
+]

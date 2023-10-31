@@ -127,11 +127,24 @@ const GetTopSellingProducts = async () => {
   }
 };
 
+const ImportBulkProducts = async (products) => {
+  try{
+    console.log('products are  ', products);
+    // eslint-disable-next-line no-unused-vars
+    const response = await Product.insertMany(products);
+    // console.log('response is  ', response);
+
+  } catch (error) {
+    throw new Error(error);
+  }
+}
+
 export {
     AddProduct,
     GetProducts,
     DeleteProduct,
     EditProduct,
     UpdateProductQuantities,
-    GetTopSellingProducts
+    GetTopSellingProducts,
+    ImportBulkProducts
 };

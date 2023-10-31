@@ -2,15 +2,18 @@ import express from 'express';
 import multer from 'multer';
 import passport from 'passport';
 import fs from 'fs';
+import path from 'path';
 
 import {
     DeleteProduct,
     EditProduct,
     GetProducts,
     GetTopSellingProducts,
-    AddProduct
+    AddProduct,
+    ImportBulkProducts
 } from '../controllers';
-import path from 'path';
+
+import DeleteFile from '../utils/delete-file';
 
 const products = express.Router();
 
@@ -22,6 +25,17 @@ const storage = multer.diskStorage({
     callback(null, Date.now() + '-' + file.originalname);
   }
 });
+
+const fileStorage = multer.diskStorage({
+  destination: function (req, file, callback) {
+    callback(null, 'file-uploads/');
+  },
+  filename: function (req, file, callback) {
+    callback(null, Date.now()+ '-'+ file.originalname);
+  }
+})
+
+const upload2 = multer({ storage: fileStorage });
 
 const upload = multer({ storage: storage });
 
@@ -129,6 +143,20 @@ products.get('/getTopSellingProducts',passport.authenticate('jwt', { session:fal
 
     res.send(err)
   }
+})
+
+// eslint-disable-next-line no-unused-vars
+products.post('/importBulkProducts', upload2.any(), async (req, res) => {
+  console.log('req ', req.files);
+  fs.readFile(req.files[0].path, function(err, data) {
+    res.writeHead(200, {'Content-Type': 'text/html'});
+    const productsArray = JSON.parse(data);
+    // console.log('prodcat array is ', productsArray);
+    ImportBulkProducts(productsArray);
+    DeleteFile(req.files[0].path);
+    res.write(data);
+    return res.end();
+  });
 })
 
 export default products;
