@@ -1,6 +1,5 @@
 import User from '../../models/user';
 
-import HashPassword from '../../utils/hash-password';
 
 const SignUp = async ({
     name,
@@ -10,17 +9,15 @@ const SignUp = async ({
 }) => {
   const user = await User.findOne({ email });
   if (!user) {
-    const hashedPassword = await HashPassword(password);
     const newUser = new User({
       name,
       email,
-      password: hashedPassword,
+      password,
       mobileNo,
       deliveryAddress: [],
       selectedPerson: 0
     });
-
-    newUser.save();
+    await newUser.save();
 
     return { user: newUser };
   }

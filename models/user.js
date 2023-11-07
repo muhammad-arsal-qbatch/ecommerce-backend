@@ -1,4 +1,6 @@
 import mongoose from 'mongoose';
+import HashPassword from '../utils/hash-password';
+import CreateCustomerOnStripe from '../utils/create-cust-on-stripe';
 
 const user = mongoose.Schema({
   name: String,
@@ -30,6 +32,30 @@ const user = mongoose.Schema({
     type: Boolean,
     default: false
   }
+})
+
+user.pre('save', async function(next){
+  try{
+    const hashedPassword = await HashPassword(this.password);
+    this.password = hashedPassword;
+    console.log('in pre hook, hashed password is', this.password);
+  } catch(err) {
+    next(err);
+  }
+
+  next();
+})
+
+user.post('save', async function(user, next){
+  try{
+    await CreateCustomerOnStripe({ user })
+
+  } catch(error) {
+    const err = new Error('error while creating customer on stripe');
+    console.log('huihui', err.message);
+    return next(err);
+  }
+  next();
 })
 
 const User = mongoose.model('users', user, 'users')

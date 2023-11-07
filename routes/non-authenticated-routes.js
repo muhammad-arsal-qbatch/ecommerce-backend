@@ -3,7 +3,6 @@ import passport from 'passport';
 
 import ScriptMethods from '../script-methods';
 import DashboardStats from '../models/dashboard-stats';
-// import AddCardStripeId from '../utils/add-card-stripeid';
 import UpdateOrderStatus from '../utils/update-order-status';
 import StoreStripeIdInUser from '../utils/store-stripeid-in-user';
 import CatchResponse from '../utils/catch-response';

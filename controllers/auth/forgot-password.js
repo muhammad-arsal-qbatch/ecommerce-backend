@@ -8,7 +8,7 @@ const ForgotPassword = async ({ email }) => {
   const token = await GenerateToken(email);
   const to = user.email;
   const subject = 'Password Reset Token';
-  const text = `http://localhost:3000/np?token=${token}`;
+  const text = `http://localhost:3000/auth/np?token=${token}`;
   await SendEmail(to, subject, text);
 
   return token;

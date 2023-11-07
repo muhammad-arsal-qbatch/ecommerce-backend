@@ -16,7 +16,7 @@ const CatchResponse = ({
   if (err.message) {
     error = err.message;
   }
-  console.log('in catch response object', err);
+  console.log('in catch response object', err.message);
 
   return res.status(statusCode).json({
     success: false,

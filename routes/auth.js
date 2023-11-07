@@ -11,7 +11,6 @@ import CatchResponse from '../utils/catch-response';
 import HashPassword from '../utils/hash-password';
 import GenerateToken from '../utils/generate-token';
 import User from '../models/user';
-import CreateCustomerOnStripe from '../utils/create-cust-on-stripe';
 
 const router = express.Router();
 
@@ -55,15 +54,14 @@ router.post('/signup', async (req,res) => {
             mobileNo
         } = req.body;
     if(email === '' || name === '' || password === ''){
-      throw new Error('Please provide Complete Credemtials')
+      throw new Error('Please provide Complete Credemtials');
     }
+
     const user= await SignUp({ name, email, password, mobileNo });
-    if(user) {
-      await CreateCustomerOnStripe(user)
-    }
+
     res.send(user);
   }catch (err) {
-    console.log('error is ', err);
+    console.log('error is ', err.message);
     err.statusCode = 401;
     CatchResponse({ res, err })
   }
@@ -85,7 +83,7 @@ router.post('/resetPassword',passport.authenticate('jwt', { session:false }), as
     const email = req.user[0].email;
     const hashedPassword = await HashPassword(newPassword);
 
-    await User.findOneAndUpdate({ email }, { password: hashedPassword });
+    await User.update({ email }, { password: hashedPassword });
     res.send(req.body);
   } catch (err) {
     err.statusCode = 400;

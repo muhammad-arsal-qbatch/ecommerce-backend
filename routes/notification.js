@@ -48,7 +48,6 @@ notification.get('/getNotifications',passport.authenticate('jwt', { session:fals
     const { userId } = req.query;
     console.log('user id is ', userId);
     const response = await Notification.find({ userId, isRead: false }, { orderId: 1, text: 1, _id: 0});
-    // console.log('respose is ', response);
     res.send(response);
   } catch(error) {
     const err = new Error('Error while Getting Notification');
