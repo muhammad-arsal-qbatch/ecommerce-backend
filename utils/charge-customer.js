@@ -15,7 +15,7 @@ const ChargeCustomer = async ({ totalAmount, email,stripeId, cardStripeId, order
     });
 
   } catch (error) {
-    throw new Error(error);
+    throw new Error('Error while charging customer on stripe');
   }
 };
 

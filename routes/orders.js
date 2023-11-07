@@ -4,6 +4,7 @@ import passport from 'passport';
 import {
     DeliverOrder,
     GetOrders,
+    MakeNotification,
     PlaceOrder
 } from '../controllers';
 
@@ -11,9 +12,9 @@ import { UpdateProductQuantities } from '../controllers';
 import User from '../models/user';
 import CreateCustomerOnStripe from '../utils/create-cust-on-stripe';
 import ChargeCustomer from '../utils/charge-customer';
+import CatchResponse from '../utils/catch-response';
 
 const orders = express.Router();
-
 
 orders.post('/placeOrder',passport.authenticate('jwt', { session:false }), async (req, res) => {
   try {
@@ -33,11 +34,13 @@ orders.post('/placeOrder',passport.authenticate('jwt', { session:false }), async
     const cardStripeId = req.body.paymentCard.cardId;
     await ChargeCustomer({ totalAmount, email, stripeId, cardStripeId, orderId });
     await UpdateProductQuantities(placedOrders.products);
+    const userId = '6537760f808f26056f6b1d64';
+    await MakeNotification({ orderId, userId, text: `New Order received Order# ${orderId}` });
 
     res.send(placedOrders.products);
-  } catch (error) {
-    res.send(error);
-  }
+  } catch (err) {
+    err.statusCode = 401;
+    CatchResponse({ res, err });  }
 });
 
 orders.get('/getOrders',passport.authenticate('jwt', { session:false }), async (req, res) => {
@@ -49,9 +52,9 @@ orders.get('/getOrders',passport.authenticate('jwt', { session:false }), async (
     const response = await GetOrders(userId, sortingObj);
 
     res.send(response);
-  } catch (error) {
-
-    res.send(error);
+  } catch (err) {
+    err.statusCode = 401;
+    CatchResponse({ res, err });
   }
 });
 
@@ -59,16 +62,24 @@ orders.get('/getOrdersByUserId',passport.authenticate('jwt', { session:false }),
   try {
     const response = await GetOrders();
     res.send(response);
-  } catch (error) { /* empty */ }
+  } catch (err) {
+    err.statusCode = 401;
+    CatchResponse({ res, err });
+  }
 });
 
 orders.put('/deliverOrder',passport.authenticate('jwt', { session:false }), async (req, res) => {
   try {
     const response = await DeliverOrder(req.body);
+    console.log('body iss  ', req.body);
+    const{ orderId, userId } = req.body
+    await MakeNotification({ orderId, userId, text: `your Order# ${orderId} has been delivered to u` });
+
 
     res.send(response);
-  } catch (error) {
-    res.status(500).send({ error: error.message });
+  } catch (err) {
+    err.statusCode = 401;
+    CatchResponse({ res, err })
   }
 });
 

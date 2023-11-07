@@ -29,6 +29,10 @@ import {
     ImportBulkProducts
 } from './products';
 
+import {
+    MakeNotification
+} from './notification';
+
 export {
     SignIn,
     SignUp,
@@ -50,5 +54,6 @@ export {
     EditProduct,
     UpdateProductQuantities,
     GetTopSellingProducts,
-    ImportBulkProducts
+    ImportBulkProducts,
+    MakeNotification
 }

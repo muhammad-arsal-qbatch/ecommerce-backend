@@ -10,7 +10,7 @@ const AddProduct = async (prod) => {
   catch(error) {
     const err = new Error();
     err.message = 'error while adding the product';
-    err.status = 400;
+    err.status = 401;
     throw err;
   }
 }
@@ -35,17 +35,16 @@ const GetProducts = async (offset, limit, search, filterObj, sortingObj) => {
     const myProducts = await Product.find(selector).sort(sortingObj).skip(offset).limit(limit);
     return { myProducts };
   } catch(error) {
-    throw new Error('error while getting the data', error)
+    throw new Error('error while getting the data')
   }
 }
 
 const DeleteProduct = async (product) => {
   try{
-    console.log('product in finak,, ', product);
     const obj = await Product.deleteOne({_id: product._id});
     return { obj };
   }catch(error) {
-    return { 'error':'error while deleting the product' };
+    throw new Error ('error while deleting the product')
   }
 }
 
@@ -67,7 +66,7 @@ const EditProduct = async (editedProduct) => {
 
     return { updatedObject };
   } catch (error) {
-    return { error: 'Product not found or could not be updated.' };
+    throw new Error('Product not found or could not be updated.');
   }
 };
 
@@ -81,7 +80,9 @@ const UpdateProductQuantities = async (products) => {
         foundProduct.totalSold += quantity;
 
         await foundProduct.save();
-      } else { /* empty */ }
+      } else {
+        throw new Error('Product not found')
+      }
     }
   } catch (error) {
     throw new Error('error while updating products quanitties');
@@ -122,20 +123,18 @@ const GetTopSellingProducts = async () => {
 
     return topSellingProducts;
   } catch (error) {
-    console.error(error);
-    throw error;
+    throw new Error('Error while fetching top selling products');
   }
 };
 
 const ImportBulkProducts = async (products) => {
   try{
-    console.log('products are  ', products);
     // eslint-disable-next-line no-unused-vars
-    const response = await Product.insertMany(products);
+    const response = await Product.insesrtMany(products);
     // console.log('response is  ', response);
 
   } catch (error) {
-    throw new Error(error);
+    throw new Error('Error While importing bulk products');
   }
 }
 

@@ -5,9 +5,10 @@ const PlaceOrder = async (order) => {
   try {
     const finalOrder = await GetFinalOrder(order);
     await Orders.insertMany(finalOrder);
-
     return finalOrder;
-  } catch (error) { /* empty */ }
+  } catch (error) {
+    throw new Error(error.message);
+  }
 };
 
 const GetOrders = async (userId, sortingObj) => {
@@ -15,7 +16,9 @@ const GetOrders = async (userId, sortingObj) => {
     const orders = await Orders.find(userId).sort(sortingObj);
 
     return orders;
-  } catch (error) { /* empty */ }
+  } catch (error) {
+    throw new Error('Error while fetching orders');
+  }
 };
 
 const GetFinalOrder = async (order) => {
@@ -36,7 +39,9 @@ const GetFinalOrder = async (order) => {
     order.totalAmount = totalAmount;
 
     return order;
-  } catch (error) { /* empty */ }
+  } catch (error) {
+    throw new Error('Error While Fetching Orders');
+  }
 };
 
 const DeliverOrder = async (order) => {
@@ -56,18 +61,15 @@ const DeliverOrder = async (order) => {
 };
 
 const UpdateDeliveryAddress = async ({ userId, body }) => {
-  try {
-    const user = await User.findOne({ _id: userId });
-    if (!user) {
-      return { error: 'User not found' };
-    }
-    user.selectedPerson = body;
-    await user.save();
-
-    return user;
-  } catch (error) {
-    return { error };
+  const user = await User.findOne({ _id: userId });
+  if (!user) {
+    throw new Error('User not found');
   }
+  user.selectedPerson = body;
+  await user.save();
+
+  return user;
+
 };
 
 export {

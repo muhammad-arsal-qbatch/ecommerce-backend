@@ -8,7 +8,7 @@ const CreateCustomerOnStripe = async ({ user }) => {
       email: user.email
     });
   } catch (error) {
-    throw new Error(error);
+    throw new Error('error while creating customer on stripe');
   }
 
 }

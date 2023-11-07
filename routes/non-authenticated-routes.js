@@ -6,6 +6,7 @@ import DashboardStats from '../models/dashboard-stats';
 // import AddCardStripeId from '../utils/add-card-stripeid';
 import UpdateOrderStatus from '../utils/update-order-status';
 import StoreStripeIdInUser from '../utils/store-stripeid-in-user';
+import CatchResponse from '../utils/catch-response';
 
 const nonAuthenticatedRouter = express.Router();
 
@@ -23,8 +24,9 @@ nonAuthenticatedRouter.get('/script', async (req, res) => {
     });
 
     res.send('OK');
-  } catch (error) {
-    res.send(error.message);
+  } catch (err) {
+    err.statusCode = 401;
+    CatchResponse({ res, err })
   }
 });
 
@@ -33,9 +35,9 @@ nonAuthenticatedRouter.get('/getStats',passport.authenticate('jwt', { session:fa
     const stats = await DashboardStats.find({});
 
     res.send(stats);
-  } catch (error) {
-    res.send(error);
-  }
+  } catch (err) {
+    err.statusCode = 401;
+    CatchResponse({ res, err })  }
 });
 
 nonAuthenticatedRouter.post('/webhook', async (req, res)=> {

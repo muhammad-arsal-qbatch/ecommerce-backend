@@ -7,6 +7,7 @@ import {
     ForgotPassword,
 } from '../controllers';
 
+import CatchResponse from '../utils/catch-response';
 import HashPassword from '../utils/hash-password';
 import GenerateToken from '../utils/generate-token';
 import User from '../models/user';
@@ -23,8 +24,7 @@ router.post('/signIn', async (req,res) => {
   try{
     if(email === '' || password === '')
         {
-      res.status(401).send({ error: 'please provide complete credentials' });
-      return;
+      throw new Error('please provide complete credentials')
     }
     const result = await SignIn({
       email,
@@ -34,15 +34,15 @@ router.post('/signIn', async (req,res) => {
     if(!result.message)
         {
       const token = GenerateToken(email);
+      console.log('user is  ', result.user);
       res.status(200).send({
         message: token,
         user: result.user
       })
     }
   }catch (error) {
-    res.status(401).send({ error: error.message });
-
-    return;
+    error.statusCode = 401;
+    CatchResponse({ res, err: error })
   }
 })
 
@@ -55,9 +55,7 @@ router.post('/signup', async (req,res) => {
             mobileNo
         } = req.body;
     if(email === '' || name === '' || password === ''){
-      res.status(401).send({ error: 'Please provide Complete Credemtials' })
-
-      return;
+      throw new Error('Please provide Complete Credemtials')
     }
     const user= await SignUp({ name, email, password, mobileNo });
     if(user) {
@@ -65,7 +63,9 @@ router.post('/signup', async (req,res) => {
     }
     res.send(user);
   }catch (err) {
-    res.status(500).send({ error: err.message });
+    console.log('error is ', err);
+    err.statusCode = 401;
+    CatchResponse({ res, err })
   }
 })
 
@@ -74,7 +74,8 @@ router.post('/forgotPassword', async(req, res) => {
     const resetToken =  await ForgotPassword(req.body);
     res.send(resetToken);
   } catch (err) {
-    res.status(400).send({error: err.message});
+    err.statusCode = 401;
+    CatchResponse({ res, err })
   }
 })
 
@@ -87,7 +88,8 @@ router.post('/resetPassword',passport.authenticate('jwt', { session:false }), as
     await User.findOneAndUpdate({ email }, { password: hashedPassword });
     res.send(req.body);
   } catch (err) {
-    res.status(400).send({error: err.message});
+    err.statusCode = 400;
+    CatchResponse({ res, err });
   }
 })
 

@@ -1,4 +1,4 @@
-import { GenerateToken } from '../../middlewares/auth';
+import GenerateToken from '../..//utils/generate-token';
 import SendEmail from '../../utils/send-email';
 import User from '../../models/user';
 

@@ -6,13 +6,18 @@ const SignIn = async ({
     email,
     password
 }) => {
-  const user = await User.findOne({ email });
-  if(!user)
+  const foundUser = await User.findOne({ email });
+  if(!foundUser)
     throw new Error('Please create account first' );
 
-  if (user) {
-    const value = await bcrypt.compare(password, user.password);
+  if (foundUser) {
+    const value = await bcrypt.compare(password, foundUser.password);
     if (value) {
+      // foundUser.admin = foundUser.admin === 'present' ? foundUser.admin : 'absent';
+      const user = { name: foundUser.name,
+        email: foundUser.email,
+        userId: foundUser._id,
+        admin: foundUser.admin? foundUser.admin : false }
       return { user };
     } else {
       throw new Error('Invalid Credentials' );

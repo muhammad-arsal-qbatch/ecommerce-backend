@@ -21,7 +21,7 @@ const AddDeliveryAddress = async (body) => {
 
     return singleUser;
   } catch(err) {
-    throw new Error(err);
+    throw new Error('error while adding address');
   }
 };
 
@@ -50,7 +50,7 @@ const AddPaymentMethodToStripe = async ({ paymentMethod, stripeId }) => {
     return card;
   } catch (error) {
     console.error('Error adding payment method:', error);
-    throw new Error(error);
+    throw new Error('Error while adding payment method on stripe');
   }
 };
 
@@ -82,7 +82,7 @@ const GetDeliveryAddress = async ({ userId }) => {
 
     return user.deliveryAddress[user.selectedPerson];
   } catch(err) {
-    throw new Error(err);
+    throw new Error('Error while fetching delivery address');
   }
 };
 
@@ -107,7 +107,7 @@ const GetDefaultPaymentMethod = async ({ userId }) => {
     }
     return cardDetails;
   } catch(err) {
-    throw new Error(err);
+    throw new Error('Error while fetching default card details');
   }
 };
 
@@ -117,7 +117,7 @@ const GetAllDeliveryAddress = async ({ userId }) => {
 
     return user.deliveryAddress;
   } catch(err) {
-    throw new Error(err);
+    throw new Error('Error While Fetching delivery addresses');
   }
 };
 
@@ -136,11 +136,10 @@ const GetAllPaymentMethods = async ({ userId }) => {
       exp_month: card.exp_month,
       exp_year: card.exp_year,
     }));
-    // console.log({ allPaymentMethods });
 
     return allPaymentMethods;
   } catch (err) {
-    throw new Error(err);
+    throw new Error('Error while fetching payment methods');
   }
 };
 

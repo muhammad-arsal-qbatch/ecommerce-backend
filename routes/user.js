@@ -9,9 +9,11 @@ import {
     GetDeliveryAddress,
     GetDefaultPaymentMethod
 } from '../controllers';
+
 import CreateCustomerOnStripe from '../utils/create-cust-on-stripe';
 import { UpdateDeliveryAddress } from '../controllers';
 import User from '../models/user';
+import CatchResponse from '../utils/catch-response';
 
 const router = express.Router();
 
@@ -25,7 +27,8 @@ router.post('/addDeliveryAddress', async (req, res) => {
     const resposne = await AddDeliveryAddress(req.body)
     res.send(req.body);
   } catch(err) {
-    res.status(400).send(err);
+    err.statusCode = 400;
+    CatchResponse({ res, err })
   }
 });
 
@@ -42,7 +45,8 @@ router.post('/addPaymentMethod', async (req, res) => {
     console.log('my response is  ', resposne);
     res.send(req.body);
   } catch(err) {
-    res.status(400).send(err);
+    err.statusCode = 400;
+    CatchResponse({ res, err });
   }
 });
 
@@ -51,7 +55,8 @@ router.put('/updateDeliveryPerson', async (req, res) => {
     const resposne = await UpdateDeliveryAddress(req.body)
     res.send(resposne);
   } catch(err) {
-    res.status(400).send(err);
+    err.statusCode = 500;
+    CatchResponse({ res, err });
   }
 });
 
@@ -60,7 +65,8 @@ router.get('/getDeliveryAddress', async (req, res) => {
     const resposne = await GetDeliveryAddress(req.query)
     res.send(resposne);
   } catch(err) {
-    res.status(400).send(err);
+    err.statusCode = 500;
+    CatchResponse({ res, err });
   }
 });
 
@@ -69,7 +75,7 @@ router.get('/getAllDeliveryAddress', async (req, res) => {
     const resposne = await GetAllDeliveryAddress(req.query)
     res.send(resposne);
   } catch(err) {
-    res.status(400).send(err);
+    CatchResponse({ res, err });
   }
 });
 
@@ -78,7 +84,8 @@ router.get('/getDefaultPaymentMethod', async (req, res) => {
     const resposne = await GetDefaultPaymentMethod(req.query)
     res.send(resposne);
   } catch(err) {
-    res.status(400).send(err);
+    err.statusCode = 500;
+    CatchResponse({ res, err });
   }
 });
 
@@ -87,7 +94,8 @@ router.get('/getAllPaymentMethods', async (req, res) => {
     const resposne = await GetAllPaymentMethods(req.query)
     res.send(resposne);
   } catch(err) {
-    res.status(400).send(err);
+    err.statusCode = 500;
+    CatchResponse({ res, err });
   }
 });
 

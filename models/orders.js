@@ -5,7 +5,7 @@ const orders = mongoose.Schema({
     type: Number,
     required: true,
   },
-  products: {
+  products: {  // should not be here.. separate collection product id, quantity, color/size, price, total price, address should be also
     type: Array,
     required: true
   },

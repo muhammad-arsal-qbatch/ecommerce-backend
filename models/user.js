@@ -25,6 +25,10 @@ const user = mongoose.Schema({
   stripeId: {
     type: String,
     default : ''
+  },
+  admin: {
+    type: Boolean,
+    default: false
   }
 })
 
