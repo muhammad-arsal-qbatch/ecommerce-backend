@@ -146,7 +146,6 @@ products.get('/getTopSellingProducts',passport.authenticate('jwt', { session:fal
   }
 })
 
-// eslint-disable-next-line no-unused-vars
 products.post('/importBulkProducts', upload2.any(), async (req, res) => {
   try{
     fs.readFile(req.files[0].path, async function(err, data) {
@@ -170,6 +169,7 @@ products.post('/importBulkProducts', upload2.any(), async (req, res) => {
       res.write(data);
       return res.end();
     });
+
   } catch (err) {
     err.statusCode = 400;
     CatchResponse({ res, err });

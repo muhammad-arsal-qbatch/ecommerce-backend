@@ -16,7 +16,7 @@ const SignIn = async ({
       // foundUser.admin = foundUser.admin === 'present' ? foundUser.admin : 'absent';
       const user = { name: foundUser.name,
         email: foundUser.email,
-        userId: foundUser._id,
+        _id: foundUser._id,
         admin: foundUser.admin? foundUser.admin : false }
       return { user };
     } else {

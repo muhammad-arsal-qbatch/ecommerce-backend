@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 
 import { stripeClient, stripeClient2 } from '../config/config';
 import User from '../models/user';
@@ -15,11 +14,16 @@ const AddDeliveryAddress = async (body) => {
       address: body.address,
       country: body.country,
     };
-    const singleUser = await User.findOne({ _id: body.userId });
-    singleUser.deliveryAddress.push(deliveryPerson);
-    await singleUser.save();
+    // const singleUser = await User.findOne({ _id: body.userId });
+    // singleUser.deliveryAddress.push(deliveryPerson);
+    User.updateOne({
+      _id: body.userId
+    },
+    {$push:{deliveryAddress: deliveryPerson}}
+    ).exec();
+    // await singleUser.save();
 
-    return singleUser;
+    // return singleUser;
   } catch(err) {
     throw new Error('error while adding address');
   }
@@ -37,7 +41,6 @@ const AddPaymentMethodToStripe = async ({ paymentMethod, stripeId }) => {
     })
 
     // Attach the payment method to the customer
-    // eslint-disable-next-line no-unused-vars
     const source = await stripeClient.customers.createSource(stripeId, {
       source: card.id,
       metadata: {
@@ -46,8 +49,7 @@ const AddPaymentMethodToStripe = async ({ paymentMethod, stripeId }) => {
       },
     });
 
-    console.log('Payment method added to customer:', card);
-    return card;
+    return source;
   } catch (error) {
     console.error('Error adding payment method:', error);
     throw new Error('Error while adding payment method on stripe');
@@ -64,10 +66,6 @@ const AddPaymentMethod = async (body) => {
     };
     const singleUser = await User.findOne({ _id: body.userId });
     const { stripeId } = singleUser;
-    // singleUser.paymentMethods.push(paymentMethod);
-    // await singleUser.save();
-    console.log('customer stripe id is ', singleUser);
-    console.log('payment method  is ', paymentMethod);
     await AddPaymentMethodToStripe({ paymentMethod, stripeId })
 
     return singleUser;

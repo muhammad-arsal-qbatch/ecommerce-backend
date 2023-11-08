@@ -53,16 +53,7 @@ nonAuthenticatedRouter.post('/webhook', async (req, res)=> {
     await UpdateOrderStatus({ orderId });
   }
 
-  if(event.type === 'customer.source.created')
-  {
-    // eslint-disable-next-line no-unused-vars
-    const cardStripeId = event.data.object.id;
-    // const {cardNumber, userStripeId} = event.data.object.metadata
-
-    // await AddCardStripeId({ userStripeId, cardNumber, cardStripeId })
-  }
   res.json({ received: true });
-
 });
 
 

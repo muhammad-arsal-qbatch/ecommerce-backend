@@ -129,10 +129,9 @@ const GetTopSellingProducts = async () => {
 
 const ImportBulkProducts = async (products) => {
   try{
-    // eslint-disable-next-line no-unused-vars
     const response = await Product.insesrtMany(products);
-    // console.log('response is  ', response);
 
+    return response;
   } catch (error) {
     throw new Error('Error While importing bulk products');
   }

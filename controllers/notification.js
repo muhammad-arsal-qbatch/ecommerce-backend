@@ -2,6 +2,7 @@ import Notification from '../models/notification';
 
 const MakeNotification = async ({ orderId, userId, text }) => {
   try {
+    console.log('user id and order id is ', userId, orderId);
     const notification = new Notification({
       userId,
       orderId,

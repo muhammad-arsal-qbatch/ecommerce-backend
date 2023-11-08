@@ -8,6 +8,7 @@ import {
     GetAllPaymentMethods,
     GetDeliveryAddress,
     GetDefaultPaymentMethod
+
 } from '../controllers';
 
 import CreateCustomerOnStripe from '../utils/create-cust-on-stripe';
@@ -17,14 +18,10 @@ import CatchResponse from '../utils/catch-response';
 
 const router = express.Router();
 
-router.get('/orders', passport.authenticate('jwt', { session:false }), async (req, res) => {
-  res.send(req.token);
-});
-
-router.post('/addDeliveryAddress', async (req, res) => {
+router.post('/addDeliveryAddress',passport.authenticate('jwt', { session:false }), async (req, res) => {
   try {
-    // eslint-disable-next-line no-unused-vars
-    const resposne = await AddDeliveryAddress(req.body)
+    await AddDeliveryAddress(req.body)
+
     res.send(req.body);
   } catch(err) {
     err.statusCode = 400;
@@ -32,17 +29,15 @@ router.post('/addDeliveryAddress', async (req, res) => {
   }
 });
 
-router.post('/addPaymentMethod', async (req, res) => {
+router.post('/addPaymentMethod',passport.authenticate('jwt', { session:false }), async (req, res) => {
   try {
     const user = await User.findOne({_id: req.body.userId})
     if(!user.stripeId)
     {
       await CreateCustomerOnStripe({ user });
     }
+    await AddPaymentMethod(req.body);
 
-    // eslint-disable-next-line no-unused-vars
-    const resposne = await AddPaymentMethod(req.body);
-    console.log('my response is  ', resposne);
     res.send(req.body);
   } catch(err) {
     err.statusCode = 400;
@@ -50,7 +45,7 @@ router.post('/addPaymentMethod', async (req, res) => {
   }
 });
 
-router.put('/updateDeliveryPerson', async (req, res) => {
+router.put('/updateDeliveryPerson',passport.authenticate('jwt', { session:false }), async (req, res) => {
   try{
     const resposne = await UpdateDeliveryAddress(req.body)
     res.send(resposne);
@@ -60,7 +55,7 @@ router.put('/updateDeliveryPerson', async (req, res) => {
   }
 });
 
-router.get('/getDeliveryAddress', async (req, res) => {
+router.get('/getDeliveryAddress',passport.authenticate('jwt', { session:false }), async (req, res) => {
   try{
     const resposne = await GetDeliveryAddress(req.query)
     res.send(resposne);
@@ -70,7 +65,7 @@ router.get('/getDeliveryAddress', async (req, res) => {
   }
 });
 
-router.get('/getAllDeliveryAddress', async (req, res) => {
+router.get('/getAllDeliveryAddress',passport.authenticate('jwt', { session:false }), async (req, res) => {
   try{
     const resposne = await GetAllDeliveryAddress(req.query)
     res.send(resposne);
@@ -79,7 +74,7 @@ router.get('/getAllDeliveryAddress', async (req, res) => {
   }
 });
 
-router.get('/getDefaultPaymentMethod', async (req, res) => {
+router.get('/getDefaultPaymentMethod',passport.authenticate('jwt', { session:false }), async (req, res) => {
   try{
     const resposne = await GetDefaultPaymentMethod(req.query)
     res.send(resposne);
@@ -89,7 +84,7 @@ router.get('/getDefaultPaymentMethod', async (req, res) => {
   }
 });
 
-router.get('/getAllPaymentMethods', async (req, res) => {
+router.get('/getAllPaymentMethods',passport.authenticate('jwt', { session:false }), async (req, res) => {
   try{
     const resposne = await GetAllPaymentMethods(req.query)
     res.send(resposne);

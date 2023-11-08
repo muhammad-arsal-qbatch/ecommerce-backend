@@ -48,7 +48,9 @@ user.pre('save', async function(next){
 
 user.post('save', async function(user, next){
   try{
-    await CreateCustomerOnStripe({ user })
+    console.log('post hook is called');
+    if(!user.stripeId)
+      await CreateCustomerOnStripe({ user })
 
   } catch(error) {
     const err = new Error('error while creating customer on stripe');

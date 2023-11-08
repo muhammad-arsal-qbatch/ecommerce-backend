@@ -32,7 +32,7 @@ const GetFinalOrder = async (order) => {
     } else {
       order.orderId = 100;
     }
-    var totalAmount = 0;
+    let totalAmount = 0;
     order.products.map((product) => {
       totalAmount += product.quantity * product.price;
     });
@@ -61,12 +61,18 @@ const DeliverOrder = async (order) => {
 };
 
 const UpdateDeliveryAddress = async ({ userId, body }) => {
-  const user = await User.findOne({ _id: userId });
-  if (!user) {
-    throw new Error('User not found');
-  }
-  user.selectedPerson = body;
-  await user.save();
+  // const user = await User.findOne({ _id: userId });
+
+  // if (!user) {
+  //   throw new Error('User not found');
+  // }
+  const user = await User.findOneAndUpdate({ _id: userId },
+    { selectedPerson: body },
+    { new: true }
+  ).lean().exec();
+  // user.selectedPerson = body;
+  // await user.save();
+  console.log('update user is ,', user);
 
   return user;
 

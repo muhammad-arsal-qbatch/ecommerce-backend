@@ -2,7 +2,6 @@ import { stripeClient } from '../config/config';
 
 const ChargeCustomer = async ({ totalAmount, email,stripeId, cardStripeId, orderId }) => {
   try {
-    // eslint-disable-next-line no-unused-vars
     const charge = await stripeClient.charges.create({
       amount: 100*totalAmount,
       currency: 'usd',
@@ -14,6 +13,7 @@ const ChargeCustomer = async ({ totalAmount, email,stripeId, cardStripeId, order
       },
     });
 
+    return charge;
   } catch (error) {
     throw new Error('Error while charging customer on stripe');
   }

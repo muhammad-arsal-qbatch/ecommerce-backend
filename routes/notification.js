@@ -27,8 +27,8 @@ notification.post('/makeNotification', passport.authenticate('jwt', { session:fa
 
 notification.put('/readNotification', passport.authenticate('jwt', { session:false }), async (req, res) => {
   try {
-    // console.log('req', req.body);
     const { orderId, userId } =req.body;
+    console.log('user id and order id is ', userId, orderId);
     await Notification.updateOne({ userId, orderId }, {
       $set: {
         isRead: true
@@ -48,6 +48,7 @@ notification.get('/getNotifications',passport.authenticate('jwt', { session:fals
     const { userId } = req.query;
     console.log('user id is ', userId);
     const response = await Notification.find({ userId, isRead: false }, { orderId: 1, text: 1, _id: 0});
+    console.log('response is  ', response);
     res.send(response);
   } catch(error) {
     const err = new Error('Error while Getting Notification');
